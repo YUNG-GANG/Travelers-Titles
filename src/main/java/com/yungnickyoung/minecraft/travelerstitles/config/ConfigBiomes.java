@@ -35,15 +35,15 @@ public class ConfigBiomes {
             .comment(
                 " How long the text displays, in ticks.\n" +
                 " 20 ticks = 1 second.\n" +
-                " Default: 70")
-            .define("Text Display Time", 70);
+                " Default: 50")
+            .define("Text Display Time", 50);
 
         textFadeOutTime = BUILDER
             .comment(
                 " How long the fade-out text effect lasts, in ticks.\n" +
                 " 20 ticks = 1 second.\n" +
-                " Default: 20")
-            .define("Text Fade-Out Time", 20);
+                " Default: 10")
+            .define("Text Fade-Out Time", 10);
 
         textColor = BUILDER
             .comment(
