@@ -59,6 +59,11 @@ public class TTModClient {
             BlockPos currPos = event.player.getPosition();
 
             if (event.player.world.isBlockPresent(currPos)) {
+                // If dimension has surface, make sure player isn't underground
+                if (TTConfig.general.onlyUpdateAtSurface.get() && event.player.world.getDimensionType().hasSkyLight() && !event.player.world.canBlockSeeSky(currPos)) {
+                    return;
+                }
+
                 // Display dimension text
                 DimensionType currDimension = event.player.world.getDimensionType();
                 if (dimensionTitleRenderer.enabled && dimensionTitleRenderer.prevDimension != currDimension) {
@@ -90,7 +95,7 @@ public class TTModClient {
 
                 // Display biome text if dimension is not currently being displayed
                 Biome currBiome = event.player.world.getBiome(currPos);
-                if (biomeTitleRenderer.enabled && !dimensionTitleRenderer.isDisplaying && (biomeTitleRenderer.prevBiome == null || !Objects.equals(currBiome.getRegistryName(), biomeTitleRenderer.prevBiome.getRegistryName()))) {
+                if (biomeTitleRenderer.enabled && (biomeTitleRenderer.prevBiome == null || !Objects.equals(currBiome.getRegistryName(), biomeTitleRenderer.prevBiome.getRegistryName()))) {
                     biomeTitleRenderer.prevBiome = currBiome;
 
                     // Get biome key

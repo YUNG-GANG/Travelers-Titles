@@ -6,12 +6,14 @@ public class TTConfig {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
 
+    public static final ConfigGeneral general;
     public static final ConfigBiomes biomes;
     public static final ConfigDimensions dimensions;
 
     static {
         BUILDER.push("Traveler's Titles");
 
+        general = new ConfigGeneral(BUILDER);
         biomes = new ConfigBiomes(BUILDER);
         dimensions = new ConfigDimensions(BUILDER);
 

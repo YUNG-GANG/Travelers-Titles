@@ -27,8 +27,8 @@ public class ConfigBiomes {
         textFadeInTime = BUILDER
             .comment(
                 " How long the fade-in text effect lasts, in ticks.\n" +
-                    " 20 ticks = 1 second.\n" +
-                    " Default: 10")
+                " 20 ticks = 1 second.\n" +
+                " Default: 10")
             .define("Text Fade-In Time", 10);
 
         textDisplayTime = BUILDER
@@ -54,8 +54,8 @@ public class ConfigBiomes {
         textSize = BUILDER
             .comment(
                 " The text's scale.\n" +
-                " Default: 2.3")
-            .define("Text Size", 2.3);
+                " Default: 2.1")
+            .define("Text Size", 2.1);
 
         renderShadow = BUILDER
             .comment(
