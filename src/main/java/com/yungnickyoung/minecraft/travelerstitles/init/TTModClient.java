@@ -69,6 +69,7 @@ public class TTModClient {
                 DimensionType currDimension = event.player.world.getDimensionType();
                 if (dimensionTitleRenderer.enabled && !dimensionTitleRenderer.containsEntry(d -> d == currDimension)) {
                     biomeTitleRenderer.reset(); // Clear biome text when changing dimensions
+                    biomeTitleRenderer.recentEntries.clear();
 
                     // Get dimension key
                     ResourceLocation dimensionBaseKey = event.player.world.getDimensionKey().getLocation();
@@ -117,10 +118,16 @@ public class TTModClient {
                         }
 
                         // Get color of text for biome, if entry exists. Otherwise default to normal color
-                        String biomeColorKey = normalBiomeNameKey + ".color";
-                        String biomeColorStr = LanguageMap.getInstance().func_230506_b_(biomeColorKey)
-                            ? LanguageMap.getInstance().func_230503_a_(biomeColorKey)
-                            : biomeTitleRenderer.titleDefaultTextColor;
+                        String overrideBiomeColorKey = overrideBiomeNameKey + ".color";
+                        String normalBiomeColorKey = normalBiomeNameKey + ".color";
+                        String biomeColorStr;
+                        if (LanguageMap.getInstance().func_230506_b_(overrideBiomeColorKey)) {
+                            biomeColorStr = LanguageMap.getInstance().func_230503_a_(overrideBiomeColorKey);
+                        } else if (LanguageMap.getInstance().func_230506_b_(normalBiomeColorKey)) {
+                            biomeColorStr = LanguageMap.getInstance().func_230503_a_(normalBiomeColorKey);
+                        } else {
+                            biomeColorStr = biomeTitleRenderer.titleDefaultTextColor;
+                        }
 
                         // No need to display if title hasn't changed
                         if (biomeTitleRenderer.displayedTitle != null && biomeTitle.getString().equals(biomeTitleRenderer.displayedTitle.getString())) {

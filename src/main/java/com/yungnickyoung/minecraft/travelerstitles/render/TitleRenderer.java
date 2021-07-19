@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.function.Predicate;
 
 public class TitleRenderer<T> {
-    private final LinkedList<T> recentEntries = new LinkedList<>();
+    public final LinkedList<T> recentEntries = new LinkedList<>();
     public ITextComponent displayedTitle = null;
     public ITextComponent displayedSubTitle = null;
     public int titleTimer = 0;
