@@ -64,7 +64,7 @@ public class TTModClient {
                     return;
                 }
 
-                // Display dimension text
+                // Begin display dimension text logic
                 DimensionType currDimension = event.player.world.getDimensionType();
                 if (dimensionTitleRenderer.enabled && dimensionTitleRenderer.prevDimension != currDimension) {
                     dimensionTitleRenderer.prevDimension = currDimension;
@@ -93,15 +93,14 @@ public class TTModClient {
                     }
                 }
 
-                // Display biome text if dimension is not currently being displayed
+                // Begin display biome text logic
                 Biome currBiome = event.player.world.getBiome(currPos);
-                if (biomeTitleRenderer.enabled && (biomeTitleRenderer.prevBiome == null || !Objects.equals(currBiome.getRegistryName(), biomeTitleRenderer.prevBiome.getRegistryName()))) {
-                    biomeTitleRenderer.prevBiome = currBiome;
 
-                    // Get biome key
-                    ResourceLocation biomeBaseKey = currBiome.getRegistryName();
-                    String biomeNameKey = Util.makeTranslationKey("biome", biomeBaseKey);
+                // Get biome key
+                ResourceLocation biomeBaseKey = currBiome.getRegistryName();
+                String biomeNameKey = Util.makeTranslationKey("biome", biomeBaseKey);
 
+                if (biomeTitleRenderer.enabled && biomeTitleRenderer.cooldownTimer <= 0 && (biomeTitleRenderer.prevBiome == null || !Objects.equals(currBiome.getRegistryName(), biomeTitleRenderer.prevBiome.getRegistryName()))) {
                     // Ignore blacklisted biomes
                     if (!blacklistedBiomes.contains(currBiome.getRegistryName().toString())) {
                         // Only display name if entry for biome found
@@ -114,9 +113,16 @@ public class TTModClient {
                                 ? LanguageMap.getInstance().func_230503_a_(biomeColorKey)
                                 : biomeTitleRenderer.titleDefaultTextColor;
 
+                            // No need to display if title hasn't changed
+                            if (biomeTitleRenderer.displayedTitle != null && biomeTitle.getString().equals(biomeTitleRenderer.displayedTitle.getString())) {
+                                return;
+                            }
+
                             // Set display
                             biomeTitleRenderer.setColor(biomeColorStr);
                             biomeTitleRenderer.displayTitle(biomeTitle, null);
+                            biomeTitleRenderer.cooldownTimer = 0;
+                            biomeTitleRenderer.prevBiome = currBiome; // update prev biome
                         }
                     }
                 }
@@ -138,6 +144,9 @@ public class TTModClient {
                     if (dimensionTitleRenderer.titleTimer <= 0) {
                         dimensionTitleRenderer.reset();
                     }
+                }
+                if (biomeTitleRenderer.cooldownTimer > 0) {
+                    --biomeTitleRenderer.cooldownTimer;
                 }
             }
         }

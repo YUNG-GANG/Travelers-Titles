@@ -21,6 +21,7 @@ public class TitleRenderer {
     public ITextComponent displayedTitle = null;
     public ITextComponent displayedSubTitle = null;
     public int titleTimer = 0;
+    public int cooldownTimer = 0;
     public boolean isDisplaying = false;
 
     // User-customizable text effects
@@ -119,8 +120,6 @@ public class TitleRenderer {
     }
 
     public void reset() {
-        displayedTitle = null;
-        displayedSubTitle = null;
         isDisplaying = false;
     }
 
