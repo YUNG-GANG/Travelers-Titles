@@ -66,8 +66,8 @@ public class ConfigBiomes {
         textYOffset = BUILDER
             .comment(
                 " The text's vertical position on the screen.\n" +
-                " Default: -23.0")
-            .define("Text Y Offset", -23.0);
+                " Default: -33.0")
+            .define("Text Y Offset", -33.0);
 
         biomeBlacklist = BUILDER
             .comment(

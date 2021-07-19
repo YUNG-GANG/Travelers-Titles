@@ -66,8 +66,8 @@ public class ConfigDimensions {
         textYOffset = BUILDER
             .comment(
                 " The text's vertical position on the screen.\n" +
-                " Default: -25.0")
-            .define("Text Y Offset", -25.0);
+                " Default: -32.0")
+            .define("Text Y Offset", -32.0);
 
         dimensionBlacklist = BUILDER
             .comment(
