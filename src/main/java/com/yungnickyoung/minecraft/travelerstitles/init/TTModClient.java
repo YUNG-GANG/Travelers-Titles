@@ -105,7 +105,7 @@ public class TTModClient {
 
                 if (biomeTitleRenderer.enabled && biomeTitleRenderer.cooldownTimer <= 0 && !biomeTitleRenderer.containsEntry(b -> b.getRegistryName() == currBiome.getRegistryName())) {
                     // Ignore blacklisted biomes
-                    if (!blacklistedBiomes.contains(currBiome.getRegistryName().toString())) {
+                    if (biomeBaseKey != null && !blacklistedBiomes.contains(biomeBaseKey.toString())) {
                         ITextComponent biomeTitle;
 
                         // We will only display name if entry for biome found
