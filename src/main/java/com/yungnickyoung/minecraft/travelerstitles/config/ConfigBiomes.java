@@ -84,8 +84,8 @@ public class ConfigBiomes {
             .comment(
                 " Biomes that should not have any title displayed when the player enters them.\n" +
                 " Example: \"[minecraft:plains, minecraft:desert]\"\n" +
-                " Default: \"[minecraft:the_end, minecraft:river]\"")
-            .define("Blacklisted Biomes", "[minecraft:the_end, minecraft:river]");
+                " Default: \"[minecraft:the_end, minecraft:river, minecraft:frozen_river]\"")
+            .define("Blacklisted Biomes", "[minecraft:the_end, minecraft:river, minecraft:frozen_river]");
 
         recentBiomeCacheSize = BUILDER
             .comment(
