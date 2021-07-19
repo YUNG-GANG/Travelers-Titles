@@ -8,6 +8,7 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.LanguageMap;
 import net.minecraft.util.text.StringTextComponent;
@@ -99,11 +100,11 @@ public class TTModClient {
                 Biome currBiome = event.player.world.getBiome(currPos);
 
                 // Get biome key
-                ResourceLocation biomeBaseKey = currBiome.getRegistryName();
+                ResourceLocation biomeBaseKey = event.player.world.func_241828_r().getRegistry(Registry.BIOME_KEY).getKey(currBiome);
                 String overrideBiomeNameKey = Util.makeTranslationKey(TravelersTitles.MOD_ID + ".biome", biomeBaseKey);
                 String normalBiomeNameKey = Util.makeTranslationKey("biome", biomeBaseKey);
 
-                if (biomeTitleRenderer.enabled && biomeTitleRenderer.cooldownTimer <= 0 && !biomeTitleRenderer.containsEntry(b -> b.getRegistryName() == currBiome.getRegistryName())) {
+                if (biomeTitleRenderer.enabled && biomeTitleRenderer.cooldownTimer <= 0 && !biomeTitleRenderer.containsEntry(b -> event.player.world.func_241828_r().getRegistry(Registry.BIOME_KEY).getKey(b) == biomeBaseKey)) {
                     // Ignore blacklisted biomes
                     if (biomeBaseKey != null && !blacklistedBiomes.contains(biomeBaseKey.toString())) {
                         ITextComponent biomeTitle;
