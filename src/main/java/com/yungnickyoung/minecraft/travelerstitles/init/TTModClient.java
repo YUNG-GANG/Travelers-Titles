@@ -99,32 +99,39 @@ public class TTModClient {
 
                 // Get biome key
                 ResourceLocation biomeBaseKey = currBiome.getRegistryName();
-                String biomeNameKey = Util.makeTranslationKey("biome", biomeBaseKey);
+                String overrideBiomeNameKey = Util.makeTranslationKey(TravelersTitles.MOD_ID + ".biome", biomeBaseKey);
+                String normalBiomeNameKey = Util.makeTranslationKey("biome", biomeBaseKey);
 
                 if (biomeTitleRenderer.enabled && biomeTitleRenderer.cooldownTimer <= 0 && !biomeTitleRenderer.containsEntry(b -> b.getRegistryName() == currBiome.getRegistryName())) {
                     // Ignore blacklisted biomes
                     if (!blacklistedBiomes.contains(currBiome.getRegistryName().toString())) {
-                        // Only display name if entry for biome found
-                        if (LanguageMap.getInstance().func_230506_b_(biomeNameKey)) {
-                            ITextComponent biomeTitle = new TranslationTextComponent(biomeNameKey);
+                        ITextComponent biomeTitle;
 
-                            // Get color of text for biome, if entry exists. Otherwise default to normal color
-                            String biomeColorKey = biomeNameKey + ".color";
-                            String biomeColorStr = LanguageMap.getInstance().func_230506_b_(biomeColorKey)
-                                ? LanguageMap.getInstance().func_230503_a_(biomeColorKey)
-                                : biomeTitleRenderer.titleDefaultTextColor;
-
-                            // No need to display if title hasn't changed
-                            if (biomeTitleRenderer.displayedTitle != null && biomeTitle.getString().equals(biomeTitleRenderer.displayedTitle.getString())) {
-                                return;
-                            }
-
-                            // Set display
-                            biomeTitleRenderer.setColor(biomeColorStr);
-                            biomeTitleRenderer.displayTitle(biomeTitle, null);
-                            biomeTitleRenderer.cooldownTimer = TTConfig.biomes.textCooldownTime.get();
-                            biomeTitleRenderer.addRecentEntry(currBiome);
+                        // We will only display name if entry for biome found
+                        if (LanguageMap.getInstance().func_230506_b_(overrideBiomeNameKey)) { // First, check for a special user-provided override intended for TT use
+                            biomeTitle = new TranslationTextComponent(overrideBiomeNameKey);
+                        } else if (LanguageMap.getInstance().func_230506_b_(normalBiomeNameKey)) { // Next, check for normal biome lang entry
+                            biomeTitle = new TranslationTextComponent(normalBiomeNameKey);
+                        } else {
+                            return; // No entry found
                         }
+
+                        // Get color of text for biome, if entry exists. Otherwise default to normal color
+                        String biomeColorKey = normalBiomeNameKey + ".color";
+                        String biomeColorStr = LanguageMap.getInstance().func_230506_b_(biomeColorKey)
+                            ? LanguageMap.getInstance().func_230503_a_(biomeColorKey)
+                            : biomeTitleRenderer.titleDefaultTextColor;
+
+                        // No need to display if title hasn't changed
+                        if (biomeTitleRenderer.displayedTitle != null && biomeTitle.getString().equals(biomeTitleRenderer.displayedTitle.getString())) {
+                            return;
+                        }
+
+                        // Set display
+                        biomeTitleRenderer.setColor(biomeColorStr);
+                        biomeTitleRenderer.displayTitle(biomeTitle, null);
+                        biomeTitleRenderer.cooldownTimer = TTConfig.biomes.textCooldownTime.get();
+                        biomeTitleRenderer.addRecentEntry(currBiome);
                     }
                 }
             }
