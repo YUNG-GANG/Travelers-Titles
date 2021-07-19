@@ -7,11 +7,13 @@ public class ConfigBiomes {
     public final ForgeConfigSpec.ConfigValue<Integer> textFadeInTime;
     public final ForgeConfigSpec.ConfigValue<Integer> textDisplayTime;
     public final ForgeConfigSpec.ConfigValue<Integer> textFadeOutTime;
+    public final ForgeConfigSpec.ConfigValue<Integer> textCooldownTime;
     public final ForgeConfigSpec.ConfigValue<String> textColor;
     public final ForgeConfigSpec.ConfigValue<Double> textSize;
     public final ForgeConfigSpec.ConfigValue<Boolean> renderShadow;
     public final ForgeConfigSpec.ConfigValue<Double> textYOffset;
     public final ForgeConfigSpec.ConfigValue<String> biomeBlacklist;
+    public final ForgeConfigSpec.ConfigValue<Integer> recentBiomeCacheSize;
 
     public ConfigBiomes(final ForgeConfigSpec.Builder BUILDER) {
         BUILDER
@@ -45,6 +47,15 @@ public class ConfigBiomes {
                 " Default: 10")
             .define("Text Fade-Out Time", 10);
 
+        textCooldownTime = BUILDER
+            .comment(
+                " The minimum amount of time in ticks that must pass after a biome title is displayed before\n" +
+                " another can be displayed.\n" +
+                " Useful for preventing the player from being spammed if they are traveling quickly.\n" +
+                " 20 ticks = 1 second.\n" +
+                " Default: 80")
+            .define("Text Cooldown Time", 80);
+
         textColor = BUILDER
             .comment(
                 " The text's default RGB color.\n" +
@@ -75,6 +86,15 @@ public class ConfigBiomes {
                 " Example: \"[minecraft:plains, minecraft:desert]\"\n" +
                 " Default: \"[minecraft:the_end, minecraft:river]\"")
             .define("Blacklisted Biomes", "[minecraft:the_end, minecraft:river]");
+
+        recentBiomeCacheSize = BUILDER
+            .comment(
+                " Traveler's Titles tracks a list of biomes the player most recently visited in order to\n" +
+                " prevent the user from being spammed with titles when they move between the same few biomes.\n" +
+                " This is the size of that list.\n" +
+                " For example, if this value is 5, then your 5 most recent biomes will be saved.\n" +
+                " Default: 5")
+            .define("Number of Most Recent Biomes Saved", 5);
 
         BUILDER.pop();
     }

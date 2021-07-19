@@ -9,22 +9,21 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.function.Predicate;
 
-public class TitleRenderer {
-    public Biome prevBiome;
-    public DimensionType prevDimension;
+public class TitleRenderer<T> {
+    private final LinkedList<T> recentEntries = new LinkedList<>();
     public ITextComponent displayedTitle = null;
     public ITextComponent displayedSubTitle = null;
     public int titleTimer = 0;
     public int cooldownTimer = 0;
-    public boolean isDisplaying = false;
 
     // User-customizable text effects
+    public int maxRecentListSize;
     public boolean enabled;
     public int titleFadeInTicks;
     public int titleDisplayTime;
@@ -36,6 +35,7 @@ public class TitleRenderer {
     public float titleYOffset;
 
     public TitleRenderer(
+        int maxRecentListSize,
         boolean enabled,
         int fadeInTicks,
         int displayTicks,
@@ -45,6 +45,7 @@ public class TitleRenderer {
         double textSize,
         double yOffset
     ) {
+        this.maxRecentListSize = maxRecentListSize;
         this.enabled = enabled;
         this.titleFadeInTicks = fadeInTicks;
         this.titleDisplayTime = displayTicks;
@@ -56,9 +57,10 @@ public class TitleRenderer {
         this.titleYOffset = (float)yOffset;
     }
 
+    @SuppressWarnings("deprecation")
     public void renderText(RenderGameOverlayEvent.Pre event) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
-            if (isDisplaying && displayedTitle != null && titleTimer > 0) {
+            if (displayedTitle != null && titleTimer > 0) {
                 float age = (float) titleTimer - event.getPartialTicks();
                 int opacity = 255;
                 if (titleTimer > titleFadeOutTicks + titleDisplayTime) {
@@ -111,16 +113,27 @@ public class TitleRenderer {
         }
     }
 
+    public void tick() {
+        if (titleTimer > 0) {
+            --titleTimer;
+            if (titleTimer <= 0) {
+                reset();
+            }
+        }
+        if (cooldownTimer > 0) {
+            --cooldownTimer;
+        }
+    }
+
     public void displayTitle(ITextComponent titleText, @Nullable ITextComponent subtitleText) {
         displayedTitle = titleText;
-        isDisplaying = true;
         titleTimer = titleFadeInTicks + titleDisplayTime + titleFadeOutTicks;
         if (subtitleText != null)
             displayedSubTitle = subtitleText;
     }
 
     public void reset() {
-        isDisplaying = false;
+        titleTimer = 0;
     }
 
     public void setColor(String textColor) {
@@ -131,6 +144,17 @@ public class TitleRenderer {
             TravelersTitles.LOGGER.error(e.toString());
             this.titleTextcolor = 0xFFFFFF;
         }
+    }
+
+    public void addRecentEntry(T biome) {
+        if (this.recentEntries.size() >= this.maxRecentListSize) {
+            this.recentEntries.removeFirst();
+        }
+        recentEntries.addLast(biome);
+    }
+
+    public boolean containsEntry(Predicate<T> entryMatchPredicate) {
+        return this.recentEntries.stream().anyMatch(entryMatchPredicate);
     }
 
     protected void drawTextBackground(MatrixStack mStack, int yOffset, int width, int color) {

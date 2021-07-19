@@ -38,6 +38,7 @@ public class TTModConfig {
      */
     private static void reloadConfig() {
         // Biome
+        TTModClient.biomeTitleRenderer.maxRecentListSize = TTConfig.biomes.recentBiomeCacheSize.get();
         TTModClient.biomeTitleRenderer.enabled = TTConfig.biomes.enabled.get();
         TTModClient.biomeTitleRenderer.titleFadeInTicks = TTConfig.biomes.textFadeInTime.get();
         TTModClient.biomeTitleRenderer.titleDisplayTime = TTConfig.biomes.textDisplayTime.get();

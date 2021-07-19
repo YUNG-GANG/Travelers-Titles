@@ -20,10 +20,10 @@ import net.minecraftforge.event.TickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class TTModClient {
-    public static TitleRenderer biomeTitleRenderer = new TitleRenderer(
+    public static TitleRenderer<Biome> biomeTitleRenderer = new TitleRenderer<>(
+        TTConfig.biomes.recentBiomeCacheSize.get(),
         TTConfig.biomes.enabled.get(),
         TTConfig.biomes.textFadeInTime.get(),
         TTConfig.biomes.textDisplayTime.get(),
@@ -34,7 +34,8 @@ public class TTModClient {
         TTConfig.biomes.textYOffset.get()
     );
 
-    public static TitleRenderer dimensionTitleRenderer = new TitleRenderer(
+    public static TitleRenderer<DimensionType> dimensionTitleRenderer = new TitleRenderer<>(
+        1,
         TTConfig.dimensions.enabled.get(),
         TTConfig.dimensions.textFadeInTime.get(),
         TTConfig.dimensions.textDisplayTime.get(),
@@ -66,8 +67,7 @@ public class TTModClient {
 
                 // Begin display dimension text logic
                 DimensionType currDimension = event.player.world.getDimensionType();
-                if (dimensionTitleRenderer.enabled && dimensionTitleRenderer.prevDimension != currDimension) {
-                    dimensionTitleRenderer.prevDimension = currDimension;
+                if (dimensionTitleRenderer.enabled && !dimensionTitleRenderer.containsEntry(d -> d == currDimension)) {
                     biomeTitleRenderer.reset(); // Clear biome text when changing dimensions
 
                     // Get dimension key
@@ -90,6 +90,7 @@ public class TTModClient {
                         // Set display
                         dimensionTitleRenderer.setColor(dimensionColorStr);
                         dimensionTitleRenderer.displayTitle(dimensionTitle, null);
+                        dimensionTitleRenderer.addRecentEntry(currDimension);
                     }
                 }
 
@@ -100,7 +101,7 @@ public class TTModClient {
                 ResourceLocation biomeBaseKey = currBiome.getRegistryName();
                 String biomeNameKey = Util.makeTranslationKey("biome", biomeBaseKey);
 
-                if (biomeTitleRenderer.enabled && biomeTitleRenderer.cooldownTimer <= 0 && (biomeTitleRenderer.prevBiome == null || !Objects.equals(currBiome.getRegistryName(), biomeTitleRenderer.prevBiome.getRegistryName()))) {
+                if (biomeTitleRenderer.enabled && biomeTitleRenderer.cooldownTimer <= 0 && !biomeTitleRenderer.containsEntry(b -> b.getRegistryName() == currBiome.getRegistryName())) {
                     // Ignore blacklisted biomes
                     if (!blacklistedBiomes.contains(currBiome.getRegistryName().toString())) {
                         // Only display name if entry for biome found
@@ -121,8 +122,8 @@ public class TTModClient {
                             // Set display
                             biomeTitleRenderer.setColor(biomeColorStr);
                             biomeTitleRenderer.displayTitle(biomeTitle, null);
-                            biomeTitleRenderer.cooldownTimer = 0;
-                            biomeTitleRenderer.prevBiome = currBiome; // update prev biome
+                            biomeTitleRenderer.cooldownTimer = TTConfig.biomes.textCooldownTime.get();
+                            biomeTitleRenderer.addRecentEntry(currBiome);
                         }
                     }
                 }
@@ -131,23 +132,10 @@ public class TTModClient {
     }
 
     public static void clientTick(TickEvent.ClientTickEvent event) {
-        if (!Minecraft.getInstance().isGamePaused()) {
-            if (event.phase == TickEvent.Phase.START) {
-                if (biomeTitleRenderer.titleTimer > 0) {
-                    --biomeTitleRenderer.titleTimer;
-                    if (biomeTitleRenderer.titleTimer <= 0) {
-                        biomeTitleRenderer.reset();
-                    }
-                }
-                if (dimensionTitleRenderer.titleTimer > 0) {
-                    --dimensionTitleRenderer.titleTimer;
-                    if (dimensionTitleRenderer.titleTimer <= 0) {
-                        dimensionTitleRenderer.reset();
-                    }
-                }
-                if (biomeTitleRenderer.cooldownTimer > 0) {
-                    --biomeTitleRenderer.cooldownTimer;
-                }
+        if (event.phase == TickEvent.Phase.START) {
+            if (!Minecraft.getInstance().isGamePaused()) {
+                biomeTitleRenderer.tick();
+                dimensionTitleRenderer.tick();
             }
         }
     }
