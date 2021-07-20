@@ -1,6 +1,8 @@
 package com.yungnickyoung.minecraft.travelerstitles.init;
 
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitles;
+import com.yungnickyoung.minecraft.travelerstitles.command.BiomeTitleCommand;
+import com.yungnickyoung.minecraft.travelerstitles.command.DimensionTitleCommand;
 import com.yungnickyoung.minecraft.travelerstitles.config.TTConfig;
 import com.yungnickyoung.minecraft.travelerstitles.render.TitleRenderer;
 import net.minecraft.client.Minecraft;
@@ -17,6 +19,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 
 import java.util.ArrayList;
@@ -58,6 +61,8 @@ public class TTModClient {
         MinecraftForge.EVENT_BUS.addListener(TTModClient::showTextOnBiomeOrDimensionChange);
         MinecraftForge.EVENT_BUS.addListener(TTModClient::clientTick);
         MinecraftForge.EVENT_BUS.addListener(TTModClient::renderTitles);
+        MinecraftForge.EVENT_BUS.addListener(TTModClient::registerCommands);
+
     }
 
     public static void showTextOnBiomeOrDimensionChange(TickEvent.PlayerTickEvent event) {
@@ -162,5 +167,10 @@ public class TTModClient {
     public static void renderTitles(RenderGameOverlayEvent.Pre event) {
         biomeTitleRenderer.renderText(event);
         dimensionTitleRenderer.renderText(event);
+    }
+
+    public static void registerCommands(RegisterCommandsEvent event) {
+        BiomeTitleCommand.register(event.getDispatcher());
+        DimensionTitleCommand.register(event.getDispatcher());
     }
 }
