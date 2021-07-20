@@ -12,8 +12,10 @@ public class ConfigBiomes {
     public final ForgeConfigSpec.ConfigValue<Double> textSize;
     public final ForgeConfigSpec.ConfigValue<Boolean> renderShadow;
     public final ForgeConfigSpec.ConfigValue<Double> textYOffset;
+    public final ForgeConfigSpec.ConfigValue<Double> textXOffset;
     public final ForgeConfigSpec.ConfigValue<String> biomeBlacklist;
     public final ForgeConfigSpec.ConfigValue<Integer> recentBiomeCacheSize;
+    public final ForgeConfigSpec.ConfigValue<Boolean> centerText;
 
     public ConfigBiomes(final ForgeConfigSpec.Builder BUILDER) {
         BUILDER
@@ -77,8 +79,17 @@ public class ConfigBiomes {
         textYOffset = BUILDER
             .comment(
                 " The text's vertical position on the screen.\n" +
+                " A value of 0.0 refers to the center of the screen.\n" +
                 " Default: -33.0")
             .define("Text Y Offset", -33.0);
+
+        textXOffset = BUILDER
+            .comment(
+                " The text's horizontal position on the screen.\n" +
+                " If Horizontally Center Title is enabled, this setting is disregarded.\n" +
+                " A value of 0.0 refers to the center of the screen.\n" +
+                " Default: 0")
+            .define("Text X Offset", 0.0);
 
         biomeBlacklist = BUILDER
             .comment(
@@ -95,6 +106,13 @@ public class ConfigBiomes {
                 " For example, if this value is 5, then your 5 most recent biomes will be saved.\n" +
                 " Default: 5")
             .define("Number of Most Recent Biomes Saved", 5);
+
+        centerText = BUILDER
+            .comment(
+                " Whether or not the biome text should be horizontally centered on the screen.\n" +
+                " If enabled, the Text X Offset setting is disregarded.\n" +
+                " Default: true")
+            .define("Horizontally Center Title", true);
 
         BUILDER.pop();
     }

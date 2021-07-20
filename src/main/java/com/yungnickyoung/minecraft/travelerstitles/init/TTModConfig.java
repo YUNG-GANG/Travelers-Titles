@@ -46,7 +46,9 @@ public class TTModConfig {
         TTModClient.biomeTitleRenderer.titleDefaultTextColor = TTConfig.biomes.textColor.get();
         TTModClient.biomeTitleRenderer.showTextShadow = TTConfig.biomes.renderShadow.get();
         TTModClient.biomeTitleRenderer.titleTextSize = TTConfig.biomes.textSize.get().floatValue();
+        TTModClient.biomeTitleRenderer.titleXOffset = TTConfig.biomes.textXOffset.get().floatValue();
         TTModClient.biomeTitleRenderer.titleYOffset = TTConfig.biomes.textYOffset.get().floatValue();
+        TTModClient.biomeTitleRenderer.isTextCentered = TTConfig.biomes.centerText.get();
 
         // Dimension
         TTModClient.dimensionTitleRenderer.enabled = TTConfig.dimensions.enabled.get();
@@ -56,7 +58,9 @@ public class TTModConfig {
         TTModClient.dimensionTitleRenderer.titleDefaultTextColor = TTConfig.dimensions.textColor.get();
         TTModClient.dimensionTitleRenderer.showTextShadow = TTConfig.dimensions.renderShadow.get();
         TTModClient.dimensionTitleRenderer.titleTextSize = TTConfig.dimensions.textSize.get().floatValue();
+        TTModClient.dimensionTitleRenderer.titleXOffset = TTConfig.dimensions.textXOffset.get().floatValue();
         TTModClient.dimensionTitleRenderer.titleYOffset = TTConfig.dimensions.textYOffset.get().floatValue();
+        TTModClient.dimensionTitleRenderer.isTextCentered = TTConfig.dimensions.centerText.get();
 
         // Parse & save biome blacklist
         String rawStringofList = TTConfig.biomes.biomeBlacklist.get();

@@ -32,7 +32,9 @@ public class TitleRenderer<T> {
     public String titleDefaultTextColor;
     public boolean showTextShadow;
     public float titleTextSize;
+    public float titleXOffset;
     public float titleYOffset;
+    public boolean isTextCentered;
 
     public TitleRenderer(
         int maxRecentListSize,
@@ -43,7 +45,9 @@ public class TitleRenderer<T> {
         String textColor,
         boolean showTextShadow,
         double textSize,
-        double yOffset
+        double xOffset,
+        double yOffset,
+        boolean centerText
     ) {
         this.maxRecentListSize = maxRecentListSize;
         this.enabled = enabled;
@@ -54,7 +58,9 @@ public class TitleRenderer<T> {
         this.titleDefaultTextColor = textColor;
         this.showTextShadow = showTextShadow;
         this.titleTextSize = (float)textSize;
+        this.titleXOffset = (float)xOffset;
         this.titleYOffset = (float)yOffset;
+        this.isTextCentered = centerText;
     }
 
     @SuppressWarnings("deprecation")
@@ -86,11 +92,19 @@ public class TitleRenderer<T> {
                     int alpha = opacity << 24 & 0xFF000000;
                     FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
                     int titleWidth = fontRenderer.getStringPropertyWidth(displayedTitle);
+
+                    // Currently does nothing?
                     drawTextBackground(event.getMatrixStack(), -10, titleWidth, titleTextcolor | alpha);
+
+                    // Determine x offset
+                    float xOffset = this.isTextCentered
+                        ? (float) (-titleWidth / 2)
+                        : this.titleXOffset;
+
                     if (showTextShadow)
-                        fontRenderer.func_243246_a(event.getMatrixStack(), displayedTitle, (float) (-titleWidth / 2), titleYOffset, titleTextcolor | alpha);
+                        fontRenderer.func_243246_a(event.getMatrixStack(), displayedTitle, xOffset, titleYOffset, titleTextcolor | alpha);
                     else
-                        fontRenderer.func_243248_b(event.getMatrixStack(), displayedTitle, (float) (-titleWidth / 2), titleYOffset, titleTextcolor | alpha);
+                        fontRenderer.func_243248_b(event.getMatrixStack(), displayedTitle, xOffset, titleYOffset, titleTextcolor | alpha);
                     RenderSystem.popMatrix();
 
                     // Subtitle render. Currently unused

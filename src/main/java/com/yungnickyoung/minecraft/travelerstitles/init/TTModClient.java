@@ -32,7 +32,9 @@ public class TTModClient {
         TTConfig.biomes.textColor.get(),
         TTConfig.biomes.renderShadow.get(),
         TTConfig.biomes.textSize.get(),
-        TTConfig.biomes.textYOffset.get()
+        TTConfig.biomes.textXOffset.get(),
+        TTConfig.biomes.textYOffset.get(),
+        TTConfig.biomes.centerText.get()
     );
 
     public static TitleRenderer<DimensionType> dimensionTitleRenderer = new TitleRenderer<>(
@@ -44,7 +46,9 @@ public class TTModClient {
         TTConfig.dimensions.textColor.get(),
         TTConfig.dimensions.renderShadow.get(),
         TTConfig.dimensions.textSize.get(),
-        TTConfig.dimensions.textYOffset.get()
+        TTConfig.dimensions.textXOffset.get(),
+        TTConfig.dimensions.textYOffset.get(),
+        TTConfig.dimensions.centerText.get()
     );
 
     public static List<String> blacklistedBiomes = new ArrayList<>();
