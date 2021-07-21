@@ -79,16 +79,17 @@ public class ConfigBiomes {
         textYOffset = BUILDER
             .comment(
                 " The text's vertical position on the screen.\n" +
-                " A value of 0.0 refers to the center of the screen.\n" +
+                " If Horizontally Center Title is enabled, this number is relative to the center of the screen.\n" +
+                " If Horizontally Center Title is disabled, this number is relative to the top of the screen.\n" +
                 " Default: -33.0")
             .define("Text Y Offset", -33.0);
 
         textXOffset = BUILDER
             .comment(
                 " The text's horizontal position on the screen.\n" +
-                " If Horizontally Center Title is enabled, this setting is disregarded.\n" +
-                " A value of 0.0 refers to the center of the screen.\n" +
-                " Default: 0")
+                " If Horizontally Center Title is enabled, this number is relative to the center of the screen.\n" +
+                " If Horizontally Center Title is disabled, this number is relative to the left side of the screen.\n" +
+                " Default: 0.0")
             .define("Text X Offset", 0.0);
 
         biomeBlacklist = BUILDER
@@ -109,10 +110,10 @@ public class ConfigBiomes {
 
         centerText = BUILDER
             .comment(
-                " Whether or not the biome text should be horizontally centered on the screen.\n" +
-                " If enabled, the Text X Offset setting is disregarded.\n" +
+                " Whether or not the biome text should be centered on the screen.\n" +
+                " The Text X Offset and Text Y Offset options are relative to the center of the screen if this is enabled.\n" +
                 " Default: true")
-            .define("Horizontally Center Title", true);
+            .define("Center Title", true);
 
         BUILDER.pop();
     }

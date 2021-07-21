@@ -82,7 +82,8 @@ public class TitleRenderer<T> {
                 if (opacity > 8) {
                     // Set up render system
                     RenderSystem.pushMatrix();
-                    RenderSystem.translatef((float) (Minecraft.getInstance().getMainWindow().getScaledWidth() / 2), (float) (Minecraft.getInstance().getMainWindow().getScaledHeight() / 2), 0.0F);
+                    if (this.isTextCentered)
+                        RenderSystem.translatef((float) (Minecraft.getInstance().getMainWindow().getScaledWidth() / 2), (float) (Minecraft.getInstance().getMainWindow().getScaledHeight() / 2), 0.0F);
                     RenderSystem.enableBlend();
                     RenderSystem.defaultBlendFunc();
 
@@ -98,7 +99,7 @@ public class TitleRenderer<T> {
 
                     // Determine x offset
                     float xOffset = this.isTextCentered
-                        ? (float) (-titleWidth / 2)
+                        ? this.titleXOffset + (float) (-titleWidth / 2)
                         : this.titleXOffset;
 
                     if (showTextShadow)
@@ -161,10 +162,12 @@ public class TitleRenderer<T> {
     }
 
     public void addRecentEntry(T biome) {
-        if (this.recentEntries.size() >= this.maxRecentListSize) {
+        if (this.recentEntries.size() >= this.maxRecentListSize && this.recentEntries.size() > 0) {
             this.recentEntries.removeFirst();
         }
-        recentEntries.addLast(biome);
+        if (this.maxRecentListSize > 0) {
+            recentEntries.addLast(biome);
+        }
     }
 
     public boolean containsEntry(Predicate<T> entryMatchPredicate) {
