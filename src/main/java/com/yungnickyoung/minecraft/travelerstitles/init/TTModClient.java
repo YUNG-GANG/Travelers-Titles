@@ -165,8 +165,10 @@ public class TTModClient {
     }
 
     public static void renderTitles(RenderGameOverlayEvent.Pre event) {
-        biomeTitleRenderer.renderText(event);
-        dimensionTitleRenderer.renderText(event);
+        if (!Minecraft.getInstance().gameSettings.showDebugInfo) {
+            biomeTitleRenderer.renderText(event);
+            dimensionTitleRenderer.renderText(event);
+        }
     }
 
     public static void registerCommands(RegisterCommandsEvent event) {
