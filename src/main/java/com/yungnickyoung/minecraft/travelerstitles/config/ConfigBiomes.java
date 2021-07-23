@@ -16,6 +16,7 @@ public class ConfigBiomes {
     public final ForgeConfigSpec.ConfigValue<String> biomeBlacklist;
     public final ForgeConfigSpec.ConfigValue<Integer> recentBiomeCacheSize;
     public final ForgeConfigSpec.ConfigValue<Boolean> centerText;
+    public final ForgeConfigSpec.ConfigValue<Boolean> resetBiomeCacheOnDimensionChange;
 
     public ConfigBiomes(final ForgeConfigSpec.Builder BUILDER) {
         BUILDER
@@ -102,7 +103,7 @@ public class ConfigBiomes {
         recentBiomeCacheSize = BUILDER
             .comment(
                 " Traveler's Titles tracks a list of biomes the player most recently visited in order to\n" +
-                " prevent the user from being spammed with titles when they move between the same few biomes.\n" +
+                " prevent the player from being spammed with titles when they move between the same few biomes.\n" +
                 " This is the size of that list.\n" +
                 " For example, if this value is 5, then your 5 most recent biomes will be saved.\n" +
                 " Default: 5")
@@ -114,6 +115,15 @@ public class ConfigBiomes {
                 " The Text X Offset and Text Y Offset options are relative to the center of the screen if this is enabled.\n" +
                 " Default: true")
             .define("Center Title", true);
+
+        resetBiomeCacheOnDimensionChange = BUILDER
+            .comment(
+                " Traveler's Titles tracks a list of biomes the player most recently visited in order to\n" +
+                " prevent the player from being spammed with titles when they move between the same few biomes.\n" +
+                " This option determines whether or not that list should be cleared every time\n" +
+                " the player changes dimensions.\n" +
+                " Default: true")
+            .define("Reset Biome Cache When Changing Dimensions", true);
 
         BUILDER.pop();
     }

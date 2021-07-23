@@ -78,8 +78,10 @@ public class TTModClient {
                 // Begin display dimension text logic
                 DimensionType currDimension = event.player.world.getDimensionType();
                 if (dimensionTitleRenderer.enabled && !dimensionTitleRenderer.containsEntry(d -> d == currDimension)) {
-                    biomeTitleRenderer.reset(); // Clear biome text when changing dimensions
-                    biomeTitleRenderer.recentEntries.clear();
+                    if (TTConfig.biomes.resetBiomeCacheOnDimensionChange.get()) {
+                        biomeTitleRenderer.reset();
+                        biomeTitleRenderer.recentEntries.clear();
+                    }
 
                     // Get dimension key
                     ResourceLocation dimensionBaseKey = event.player.world.getDimensionKey().getLocation();
