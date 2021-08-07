@@ -5,7 +5,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitles;
 import com.yungnickyoung.minecraft.travelerstitles.config.TTConfig;
-import com.yungnickyoung.minecraft.travelerstitles.init.TTModClient;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.ResourceLocationArgument;
@@ -40,7 +39,7 @@ public class BiomeTitleCommand {
         String overrideBiomeNameKey = Util.makeTranslationKey(TravelersTitles.MOD_ID + ".biome", biomeBaseKey);
         String normalBiomeNameKey = Util.makeTranslationKey("biome", biomeBaseKey);
 
-        if (TTModClient.blacklistedBiomes.contains(biomeBaseKey.toString())) {
+        if (TravelersTitles.titleManager.blacklistedBiomes.contains(biomeBaseKey.toString())) {
             commandSource.sendFeedback(new StringTextComponent("That biome is blacklisted, so its title won't normally show!"), false);
         }
 
@@ -65,13 +64,13 @@ public class BiomeTitleCommand {
             } else if (LanguageMap.getInstance().func_230506_b_(normalBiomeColorKey)) {
                 biomeColorStr = LanguageMap.getInstance().func_230503_a_(normalBiomeColorKey);
             } else {
-                biomeColorStr = TTModClient.biomeTitleRenderer.titleDefaultTextColor;
+                biomeColorStr = TravelersTitles.titleManager.biomeTitleRenderer.titleDefaultTextColor;
             }
 
             // Set display
-            TTModClient.biomeTitleRenderer.setColor(biomeColorStr);
-            TTModClient.biomeTitleRenderer.displayTitle(biomeTitle, null);
-            TTModClient.biomeTitleRenderer.cooldownTimer = TTConfig.biomes.textCooldownTime.get();
+            TravelersTitles.titleManager.biomeTitleRenderer.setColor(biomeColorStr);
+            TravelersTitles.titleManager.biomeTitleRenderer.displayTitle(biomeTitle, null);
+            TravelersTitles.titleManager.biomeTitleRenderer.cooldownTimer = TTConfig.biomes.textCooldownTime.get();
 
             return 1;
         }

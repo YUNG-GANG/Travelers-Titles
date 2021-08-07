@@ -59,11 +59,18 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:" + modMinecraftVersion + "-" + modForgeVersion
     compile fg.deobf("com.yungnickyoung.minecraft.yungsapi:YungsApi:${yungsApiVersion}")
+    implementation fg.deobf("curse.maven:waystones-245755:3332276")
 }
 
 processResources {

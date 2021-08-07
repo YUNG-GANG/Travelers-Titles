@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.travelerstitles.init;
 
 import com.google.common.collect.Lists;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitles;
+import com.yungnickyoung.minecraft.travelerstitles.compat.WaystonesCompat;
 import com.yungnickyoung.minecraft.travelerstitles.config.TTConfig;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
@@ -36,31 +37,34 @@ public class TTModConfig {
     /**
      * Bakes in updated config values.
      */
-    private static void reloadConfig() {
+    public static void reloadConfig() {
         // Biome
-        TTModClient.biomeTitleRenderer.maxRecentListSize = TTConfig.biomes.recentBiomeCacheSize.get();
-        TTModClient.biomeTitleRenderer.enabled = TTConfig.biomes.enabled.get();
-        TTModClient.biomeTitleRenderer.titleFadeInTicks = TTConfig.biomes.textFadeInTime.get();
-        TTModClient.biomeTitleRenderer.titleDisplayTime = TTConfig.biomes.textDisplayTime.get();
-        TTModClient.biomeTitleRenderer.titleFadeOutTicks = TTConfig.biomes.textFadeOutTime.get();
-        TTModClient.biomeTitleRenderer.titleDefaultTextColor = TTConfig.biomes.textColor.get();
-        TTModClient.biomeTitleRenderer.showTextShadow = TTConfig.biomes.renderShadow.get();
-        TTModClient.biomeTitleRenderer.titleTextSize = TTConfig.biomes.textSize.get().floatValue();
-        TTModClient.biomeTitleRenderer.titleXOffset = TTConfig.biomes.textXOffset.get().floatValue();
-        TTModClient.biomeTitleRenderer.titleYOffset = TTConfig.biomes.textYOffset.get().floatValue();
-        TTModClient.biomeTitleRenderer.isTextCentered = TTConfig.biomes.centerText.get();
+        TravelersTitles.titleManager.biomeTitleRenderer.maxRecentListSize = TTConfig.biomes.recentBiomeCacheSize.get();
+        TravelersTitles.titleManager.biomeTitleRenderer.enabled = TTConfig.biomes.enabled.get();
+        TravelersTitles.titleManager.biomeTitleRenderer.titleFadeInTicks = TTConfig.biomes.textFadeInTime.get();
+        TravelersTitles.titleManager.biomeTitleRenderer.titleDisplayTime = TTConfig.biomes.textDisplayTime.get();
+        TravelersTitles.titleManager.biomeTitleRenderer.titleFadeOutTicks = TTConfig.biomes.textFadeOutTime.get();
+        TravelersTitles.titleManager.biomeTitleRenderer.titleDefaultTextColor = TTConfig.biomes.textColor.get();
+        TravelersTitles.titleManager.biomeTitleRenderer.showTextShadow = TTConfig.biomes.renderShadow.get();
+        TravelersTitles.titleManager.biomeTitleRenderer.titleTextSize = TTConfig.biomes.textSize.get().floatValue();
+        TravelersTitles.titleManager.biomeTitleRenderer.titleXOffset = TTConfig.biomes.textXOffset.get().floatValue();
+        TravelersTitles.titleManager.biomeTitleRenderer.titleYOffset = TTConfig.biomes.textYOffset.get().floatValue();
+        TravelersTitles.titleManager.biomeTitleRenderer.isTextCentered = TTConfig.biomes.centerText.get();
 
         // Dimension
-        TTModClient.dimensionTitleRenderer.enabled = TTConfig.dimensions.enabled.get();
-        TTModClient.dimensionTitleRenderer.titleFadeInTicks = TTConfig.dimensions.textFadeInTime.get();
-        TTModClient.dimensionTitleRenderer.titleDisplayTime = TTConfig.dimensions.textDisplayTime.get();
-        TTModClient.dimensionTitleRenderer.titleFadeOutTicks = TTConfig.dimensions.textFadeOutTime.get();
-        TTModClient.dimensionTitleRenderer.titleDefaultTextColor = TTConfig.dimensions.textColor.get();
-        TTModClient.dimensionTitleRenderer.showTextShadow = TTConfig.dimensions.renderShadow.get();
-        TTModClient.dimensionTitleRenderer.titleTextSize = TTConfig.dimensions.textSize.get().floatValue();
-        TTModClient.dimensionTitleRenderer.titleXOffset = TTConfig.dimensions.textXOffset.get().floatValue();
-        TTModClient.dimensionTitleRenderer.titleYOffset = TTConfig.dimensions.textYOffset.get().floatValue();
-        TTModClient.dimensionTitleRenderer.isTextCentered = TTConfig.dimensions.centerText.get();
+        TravelersTitles.titleManager.dimensionTitleRenderer.enabled = TTConfig.dimensions.enabled.get();
+        TravelersTitles.titleManager.dimensionTitleRenderer.titleFadeInTicks = TTConfig.dimensions.textFadeInTime.get();
+        TravelersTitles.titleManager.dimensionTitleRenderer.titleDisplayTime = TTConfig.dimensions.textDisplayTime.get();
+        TravelersTitles.titleManager.dimensionTitleRenderer.titleFadeOutTicks = TTConfig.dimensions.textFadeOutTime.get();
+        TravelersTitles.titleManager.dimensionTitleRenderer.titleDefaultTextColor = TTConfig.dimensions.textColor.get();
+        TravelersTitles.titleManager.dimensionTitleRenderer.showTextShadow = TTConfig.dimensions.renderShadow.get();
+        TravelersTitles.titleManager.dimensionTitleRenderer.titleTextSize = TTConfig.dimensions.textSize.get().floatValue();
+        TravelersTitles.titleManager.dimensionTitleRenderer.titleXOffset = TTConfig.dimensions.textXOffset.get().floatValue();
+        TravelersTitles.titleManager.dimensionTitleRenderer.titleYOffset = TTConfig.dimensions.textYOffset.get().floatValue();
+        TravelersTitles.titleManager.dimensionTitleRenderer.isTextCentered = TTConfig.dimensions.centerText.get();
+
+        // Waystones
+        WaystonesCompat.updateRendererFromConfig(TTConfig.waystones);
 
         // Parse & save biome blacklist
         String rawStringofList = TTConfig.biomes.biomeBlacklist.get();
@@ -69,13 +73,13 @@ public class TTModConfig {
         // Validate the string's format
         if (strLen < 2 || rawStringofList.charAt(0) != '[' || rawStringofList.charAt(strLen - 1) != ']') {
             TravelersTitles.LOGGER.error("INVALID VALUE FOR SETTING 'Blacklisted Biomes'. Using empty list instead...");
-            TTModClient.blacklistedBiomes = new ArrayList<>();
+            TravelersTitles.titleManager.blacklistedBiomes = new ArrayList<>();
             return;
         }
 
         // Parse string to list
         List<String> inputListOfStrings = Lists.newArrayList(rawStringofList.substring(1, strLen - 1).split(",\\s*"));
-        TTModClient.blacklistedBiomes = Lists.newArrayList(inputListOfStrings);
+        TravelersTitles.titleManager.blacklistedBiomes = Lists.newArrayList(inputListOfStrings);
 
         // Parse & save dimension blacklist
         rawStringofList = TTConfig.dimensions.dimensionBlacklist.get();
@@ -84,12 +88,12 @@ public class TTModConfig {
         // Validate the string's format
         if (strLen < 2 || rawStringofList.charAt(0) != '[' || rawStringofList.charAt(strLen - 1) != ']') {
             TravelersTitles.LOGGER.error("INVALID VALUE FOR SETTING 'Blacklisted Dimensions'. Using empty list instead...");
-            TTModClient.blacklistedDimensions = new ArrayList<>();
+            TravelersTitles.titleManager.blacklistedDimensions = new ArrayList<>();
             return;
         }
 
         // Parse string to list
         inputListOfStrings = Lists.newArrayList(rawStringofList.substring(1, strLen - 1).split(",\\s*"));
-        TTModClient.blacklistedDimensions = Lists.newArrayList(inputListOfStrings);
+        TravelersTitles.titleManager.blacklistedDimensions = Lists.newArrayList(inputListOfStrings);
     }
 }

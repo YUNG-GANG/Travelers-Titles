@@ -3,7 +3,6 @@ package com.yungnickyoung.minecraft.travelerstitles.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitles;
-import com.yungnickyoung.minecraft.travelerstitles.init.TTModClient;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.DimensionArgument;
@@ -28,7 +27,7 @@ public class DimensionTitleCommand {
         ResourceLocation dimensionBaseKey = world.getDimensionKey().getLocation();
         String dimensionNameKey = Util.makeTranslationKey(TravelersTitles.MOD_ID, dimensionBaseKey);
 
-        if (TTModClient.blacklistedDimensions.contains(dimensionBaseKey.toString())) {
+        if (TravelersTitles.titleManager.blacklistedDimensions.contains(dimensionBaseKey.toString())) {
             commandSource.sendFeedback(new StringTextComponent("That dimension is blacklisted, so its title won't normally show!"), false);
         }
 
@@ -41,11 +40,11 @@ public class DimensionTitleCommand {
         String dimensionColorKey = dimensionNameKey + ".color";
         String dimensionColorStr = LanguageMap.getInstance().func_230506_b_(dimensionColorKey)
             ? LanguageMap.getInstance().func_230503_a_(dimensionColorKey)
-            : TTModClient.dimensionTitleRenderer.titleDefaultTextColor;
+            : TravelersTitles.titleManager.dimensionTitleRenderer.titleDefaultTextColor;
 
         // Set display
-        TTModClient.dimensionTitleRenderer.setColor(dimensionColorStr);
-        TTModClient.dimensionTitleRenderer.displayTitle(dimensionTitle, null);
+        TravelersTitles.titleManager.dimensionTitleRenderer.setColor(dimensionColorStr);
+        TravelersTitles.titleManager.dimensionTitleRenderer.displayTitle(dimensionTitle, null);
 
         return 1;
     }

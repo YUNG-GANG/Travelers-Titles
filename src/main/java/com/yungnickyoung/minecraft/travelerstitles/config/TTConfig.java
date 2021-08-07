@@ -9,6 +9,7 @@ public class TTConfig {
     public static final ConfigGeneral general;
     public static final ConfigBiomes biomes;
     public static final ConfigDimensions dimensions;
+    public static final ConfigWaystones waystones;
 
     static {
         BUILDER.push("Traveler's Titles");
@@ -16,6 +17,7 @@ public class TTConfig {
         general = new ConfigGeneral(BUILDER);
         biomes = new ConfigBiomes(BUILDER);
         dimensions = new ConfigDimensions(BUILDER);
+        waystones = new ConfigWaystones(BUILDER);
 
         BUILDER.pop();
         SPEC = BUILDER.build();
