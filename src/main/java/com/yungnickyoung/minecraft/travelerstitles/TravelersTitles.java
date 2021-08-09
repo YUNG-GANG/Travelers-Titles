@@ -3,6 +3,7 @@ package com.yungnickyoung.minecraft.travelerstitles;
 import com.yungnickyoung.minecraft.travelerstitles.init.TTModClient;
 import com.yungnickyoung.minecraft.travelerstitles.init.TTModCompat;
 import com.yungnickyoung.minecraft.travelerstitles.init.TTModConfig;
+import com.yungnickyoung.minecraft.travelerstitles.init.TTModSound;
 import com.yungnickyoung.minecraft.travelerstitles.render.TitleRenderManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -25,5 +26,6 @@ public class TravelersTitles {
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> TTModConfig::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> TTModCompat::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> TTModClient::init);
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> TTModSound::init);
     }
 }

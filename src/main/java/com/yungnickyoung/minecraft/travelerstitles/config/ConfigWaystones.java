@@ -18,6 +18,7 @@ public class ConfigWaystones {
     public final ForgeConfigSpec.ConfigValue<Boolean> resetWaystoneCacheOnDimensionChange;
     public final ForgeConfigSpec.ConfigValue<Integer> range;
     public final ForgeConfigSpec.ConfigValue<Boolean> waystonesOverrideBiomeTitle;
+    public final ForgeConfigSpec.ConfigValue<Boolean> onlyUpdateAtSurface;
 
     public ConfigWaystones(final ForgeConfigSpec.Builder BUILDER) {
         BUILDER
@@ -132,6 +133,13 @@ public class ConfigWaystones {
                 " the Waystone title will take precedence.\n" +
                 " Default: true")
             .define("Waystone Titles Override Biome Titles", true);
+
+        onlyUpdateAtSurface = BUILDER
+            .comment(
+                " If enabled, dimensions without ceilings (like the Overworld) will only display Waystone titles when the player is exposed to the skylight.\n" +
+                " This prevents Waystone titles from showing while the player is underground.\n" +
+                " Default: false")
+            .define("Only Show Waystone Titles When Exposed To Skylight", false);
 
         BUILDER.pop();
     }

@@ -17,6 +17,7 @@ public class ConfigBiomes {
     public final ForgeConfigSpec.ConfigValue<Integer> recentBiomeCacheSize;
     public final ForgeConfigSpec.ConfigValue<Boolean> centerText;
     public final ForgeConfigSpec.ConfigValue<Boolean> resetBiomeCacheOnDimensionChange;
+    public final ForgeConfigSpec.ConfigValue<Boolean> onlyUpdateAtSurface;
 
     public ConfigBiomes(final ForgeConfigSpec.Builder BUILDER) {
         BUILDER
@@ -124,6 +125,13 @@ public class ConfigBiomes {
                 " the player changes dimensions.\n" +
                 " Default: true")
             .define("Reset Biome Cache When Changing Dimensions", true);
+
+        onlyUpdateAtSurface = BUILDER
+            .comment(
+                " If enabled, dimensions without ceilings (like the Overworld) will only display biome titles when the player is exposed to the skylight.\n" +
+                " This prevents biome titles from showing while the player is underground.\n" +
+                " Default: true")
+            .define("Only Show Biome Titles When Exposed To Skylight", true);
 
         BUILDER.pop();
     }

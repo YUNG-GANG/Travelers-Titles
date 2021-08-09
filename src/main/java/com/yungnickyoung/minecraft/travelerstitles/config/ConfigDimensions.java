@@ -14,6 +14,7 @@ public class ConfigDimensions {
     public final ForgeConfigSpec.ConfigValue<Double> textXOffset;
     public final ForgeConfigSpec.ConfigValue<String> dimensionBlacklist;
     public final ForgeConfigSpec.ConfigValue<Boolean> centerText;
+    public final ForgeConfigSpec.ConfigValue<Boolean> onlyUpdateAtSurface;
 
     public ConfigDimensions(final ForgeConfigSpec.Builder BUILDER) {
         BUILDER
@@ -94,6 +95,13 @@ public class ConfigDimensions {
                 " The Text X Offset and Text Y Offset options are relative to the center of the screen if this is enabled.\n" +
                 " Default: true")
             .define("Center Title", true);
+
+        onlyUpdateAtSurface = BUILDER
+            .comment(
+                " If enabled, dimensions without ceilings (like the Overworld) will only display dimension titles when the player is exposed to the skylight.\n" +
+                " This prevents dimension titles from showing while the player is underground.\n" +
+                " Default: false")
+            .define("Only Show Dimension Titles When Exposed To Skylight", false);
 
         BUILDER.pop();
     }

@@ -3,14 +3,15 @@ package com.yungnickyoung.minecraft.travelerstitles.compat;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yungnickyoung.minecraft.travelerstitles.config.ConfigWaystones;
 import com.yungnickyoung.minecraft.travelerstitles.config.TTConfig;
+import com.yungnickyoung.minecraft.travelerstitles.init.TTModSound;
 import com.yungnickyoung.minecraft.travelerstitles.render.TitleRenderer;
 import net.blay09.mods.waystones.api.IWaystone;
 import net.blay09.mods.waystones.api.KnownWaystonesEvent;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class WaystonesCompat {
      */
     public static void init() {
         MinecraftForge.EVENT_BUS.addListener(WaystonesCompat::updateKnownWaystones);
-        MinecraftForge.EVENT_BUS.addListener(WaystonesCompat::getClosestWaystone);
+        MinecraftForge.EVENT_BUS.addListener(WaystonesCompat::updateClosestWaystone);
     }
 
     /**
@@ -48,7 +49,7 @@ public class WaystonesCompat {
         knownWaystones = event.getWaystones();
     }
 
-    private static void getClosestWaystone(final TickEvent.PlayerTickEvent event) {
+    private static void updateClosestWaystone(final TickEvent.PlayerTickEvent event) {
         waystoneUpdateTimer++;
 
         if (waystoneUpdateTimer % 10 == 0) {
@@ -84,7 +85,7 @@ public class WaystonesCompat {
     /**
      * Initializes rendering the nearest waystone title if conditions are met.
      */
-    public static boolean updateWaystoneTitle() {
+    public static boolean updateWaystoneTitle(PlayerEntity player) {
         // Invalid or missing closest waystone
         if (closestWaystone == null || !closestWaystone.hasName()) return waystoneTitleRenderer.titleTimer > 0;
 
@@ -102,6 +103,9 @@ public class WaystonesCompat {
                 waystoneTitleRenderer.displayTitle(new StringTextComponent(closestWaystone.getName()), null);
                 waystoneTitleRenderer.cooldownTimer = TTConfig.waystones.textCooldownTime.get();
                 waystoneTitleRenderer.addRecentEntry(closestWaystone);
+
+                // Play biome entry sound
+                player.playSound(TTModSound.WAYSTONE, TTConfig.sound.waystoneVolume.get().floatValue(), TTConfig.sound.waystonePitch.get().floatValue());
             }
         }
         return waystoneTitleRenderer.titleTimer > 0;

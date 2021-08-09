@@ -4,11 +4,11 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitles;
 import com.yungnickyoung.minecraft.travelerstitles.compat.WaystonesCompat;
 import com.yungnickyoung.minecraft.travelerstitles.config.TTConfig;
+import com.yungnickyoung.minecraft.travelerstitles.init.TTModSound;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
@@ -94,24 +94,17 @@ public class TitleRenderManager {
         World world = player.world;
 
         if (player instanceof ClientPlayerEntity && world != null && world.isBlockPresent(playerPos)) {
-            // If dimension has surface, make sure player isn't underground
-            if (
-                TTConfig.general.onlyUpdateAtSurface.get() &&
-                world.getDimensionType().hasSkyLight() &&
-                !world.canBlockSeeSky(playerPos)
-            ) {
-                return;
-            }
+            boolean isPlayerUnderground = world.getDimensionType().hasSkyLight() && !world.canBlockSeeSky(playerPos);
 
-            // Always render dimension title
-            updateDimensionTitle(world);
+            // Render dimension title
+            updateDimensionTitle(world, player, isPlayerUnderground);
 
-            // Render mod compat titles, if enabled
-            boolean isRenderingWaystoneTitle = updateWaystoneTitle();
+            // Render waystone title
+            boolean isRenderingWaystoneTitle = updateWaystoneTitle(player, isPlayerUnderground);
 
-            // Render biome title if title renderer is not being used by mod compat titles
+            // Render biome title if title renderer is not being used by waystone title
             if (!TTConfig.waystones.waystonesOverrideBiomeTitle.get() || !isRenderingWaystoneTitle) {
-                updateBiomeTitle(world, playerPos);
+                updateBiomeTitle(world, playerPos, player, isPlayerUnderground);
             } else {
                 biomeTitleRenderer.clearTimer();
             }
@@ -141,7 +134,11 @@ public class TitleRenderManager {
     /**
      * Updates the dimension title, color, and render timers if conditions are met.
      */
-    private void updateDimensionTitle(World world) {
+    private void updateDimensionTitle(World world, PlayerEntity player, boolean isPlayerUnderground) {
+        if (isPlayerUnderground && TTConfig.dimensions.onlyUpdateAtSurface.get()) {
+            return;
+        }
+
         DimensionType currDimension = world.getDimensionType();
 
         if (dimensionTitleRenderer.enabled && !dimensionTitleRenderer.containsEntry(d -> d == currDimension)) {
@@ -166,6 +163,9 @@ public class TitleRenderManager {
                 dimensionTitleRenderer.setColor(dimensionColorStr);
                 dimensionTitleRenderer.displayTitle(dimensionTitle, null);
                 dimensionTitleRenderer.addRecentEntry(currDimension);
+
+                // Play dimension entry sound
+                player.playSound(TTModSound.DIMENSION, TTConfig.sound.dimensionVolume.get().floatValue(), TTConfig.sound.dimensionPitch.get().floatValue());
             }
         }
     }
@@ -173,7 +173,11 @@ public class TitleRenderManager {
     /**
      * Updates the biome title, color, and render timers if conditions are met.
      */
-    private void updateBiomeTitle(World world, BlockPos playerPos) {
+    private void updateBiomeTitle(World world, BlockPos playerPos, PlayerEntity player, boolean isPlayerUnderground) {
+        if (isPlayerUnderground && TTConfig.biomes.onlyUpdateAtSurface.get()) {
+            return;
+        }
+
         Biome currBiome = world.getBiome(playerPos);
         ResourceLocation biomeBaseKey = world.func_241828_r().getRegistry(Registry.BIOME_KEY).getKey(currBiome);
 
@@ -220,6 +224,9 @@ public class TitleRenderManager {
                 biomeTitleRenderer.displayTitle(biomeTitle, null);
                 biomeTitleRenderer.cooldownTimer = TTConfig.biomes.textCooldownTime.get();
                 biomeTitleRenderer.addRecentEntry(currBiome);
+
+                // Play biome entry sound
+                player.playSound(TTModSound.BIOME, TTConfig.sound.biomeVolume.get().floatValue(), TTConfig.sound.biomePitch.get().floatValue());
             }
         }
     }
@@ -229,10 +236,15 @@ public class TitleRenderManager {
      *
      * @return true if waystone title is currently being displayed
      */
-    private boolean updateWaystoneTitle() {
-        if (ModList.get().isLoaded("waystones") && TTConfig.waystones.enabled.get()) {
-            return WaystonesCompat.updateWaystoneTitle();
+    private boolean updateWaystoneTitle(PlayerEntity player, boolean isPlayerUnderground) {
+        if (isPlayerUnderground && TTConfig.waystones.onlyUpdateAtSurface.get()) {
+            return false;
         }
+
+        if (ModList.get().isLoaded("waystones") && TTConfig.waystones.enabled.get()) {
+            return WaystonesCompat.updateWaystoneTitle(player);
+        }
+
         return false;
     }
 }
