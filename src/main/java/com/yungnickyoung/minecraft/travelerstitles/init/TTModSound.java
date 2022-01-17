@@ -1,8 +1,8 @@
 package com.yungnickyoung.minecraft.travelerstitles.init;
 
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitles;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 

@@ -1,15 +1,15 @@
 package com.yungnickyoung.minecraft.travelerstitles.compat;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yungnickyoung.minecraft.travelerstitles.config.ConfigWaystones;
 import com.yungnickyoung.minecraft.travelerstitles.config.TTConfig;
 import com.yungnickyoung.minecraft.travelerstitles.init.TTModSound;
 import com.yungnickyoung.minecraft.travelerstitles.render.TitleRenderer;
 import net.blay09.mods.waystones.api.IWaystone;
 import net.blay09.mods.waystones.api.KnownWaystonesEvent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import java.util.ArrayList;
@@ -53,20 +53,20 @@ public class WaystonesCompat {
         waystoneUpdateTimer++;
 
         if (waystoneUpdateTimer % 10 == 0) {
-            String playerDimension = event.player.world.getDimensionKey().getLocation().toString();
-            BlockPos playerPos = event.player.getPosition();
+            String playerDimension = event.player.level.dimension().location().toString();
+            BlockPos playerPos = event.player.blockPosition();
             double minDist = Double.MAX_VALUE;
 
             // Iterate waystones, finding closest one
             for (IWaystone waystone : knownWaystones) {
-                String waystoneDimension = waystone.getDimension().getLocation().toString();
+                String waystoneDimension = waystone.getDimension().location().toString();
 
                 // Only consider waystones with names
                 if (!waystone.hasName()) continue;
 
                 // Calculate distance for waystones in same dimension as player.
                 if (playerDimension.equals(waystoneDimension)) {
-                    double distance = waystone.getPos().distanceSq(playerPos);
+                    double distance = waystone.getPos().distSqr(playerPos);
                     if (distance < minDist) {
                         minDist = distance;
                         closestWaystone = waystone;
@@ -85,7 +85,7 @@ public class WaystonesCompat {
     /**
      * Initializes rendering the nearest waystone title if conditions are met.
      */
-    public static boolean updateWaystoneTitle(PlayerEntity player) {
+    public static boolean updateWaystoneTitle(Player player) {
         // Invalid or missing closest waystone
         if (closestWaystone == null || !closestWaystone.hasName()) return waystoneTitleRenderer.titleTimer > 0;
 
@@ -100,7 +100,7 @@ public class WaystonesCompat {
             ) {
                 // We only need to update if title has changed
                 waystoneTitleRenderer.setColor(waystoneTitleRenderer.titleDefaultTextColor);
-                waystoneTitleRenderer.displayTitle(new StringTextComponent(closestWaystone.getName()), null);
+                waystoneTitleRenderer.displayTitle(new TextComponent(closestWaystone.getName()), null);
                 waystoneTitleRenderer.cooldownTimer = TTConfig.waystones.textCooldownTime.get();
                 waystoneTitleRenderer.addRecentEntry(closestWaystone);
 
@@ -115,7 +115,7 @@ public class WaystonesCompat {
         waystoneTitleRenderer.tick();
     }
 
-    public static void renderText(float partialTicks, MatrixStack matrixStack) {
+    public static void renderText(float partialTicks, PoseStack matrixStack) {
         waystoneTitleRenderer.renderText(partialTicks, matrixStack);
     }
 

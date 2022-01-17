@@ -8,6 +8,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
 public class TTModConfig {
     public static void init() {
         // Register mod config with Forge
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, TTConfig.SPEC, "travelerstitles-forge-1_16.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, TTConfig.SPEC, "travelerstitles-forge-1_18.toml");
         MinecraftForge.EVENT_BUS.addListener(TTModConfig::onWorldLoad);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(TTModConfig::configChanged);
     }
@@ -25,7 +26,7 @@ public class TTModConfig {
         reloadConfig();
     }
 
-    public static void configChanged(ModConfig.ModConfigEvent event) {
+    public static void configChanged(ModConfigEvent event) {
         ModConfig config = event.getConfig();
 
         // Bake config

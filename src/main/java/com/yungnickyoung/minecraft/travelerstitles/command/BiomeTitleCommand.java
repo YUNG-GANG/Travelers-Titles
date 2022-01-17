@@ -5,52 +5,52 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitles;
 import com.yungnickyoung.minecraft.travelerstitles.config.TTConfig;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.ResourceLocationArgument;
-import net.minecraft.command.arguments.SuggestionProviders;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.LanguageMap;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.Util;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.synchronization.SuggestionProviders;
+import net.minecraft.core.Registry;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
 
 public class BiomeTitleCommand {
     public static final DynamicCommandExceptionType BIOME_NOT_FOUND_EXCEPTION = new DynamicCommandExceptionType(
-        (formatArgs) -> new TranslationTextComponent("commands.locatebiome.invalid", formatArgs));
+        (formatArgs) -> new TranslatableComponent("commands.locatebiome.invalid", formatArgs));
 
-    public static void register(CommandDispatcher<CommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands
-            .literal("biometitle").requires((source) -> source.hasPermissionLevel(2))
-            .then(Commands.argument("biome", ResourceLocationArgument.resourceLocation())
-                .suggests(SuggestionProviders.field_239574_d_)
+            .literal("biometitle").requires((source) -> source.hasPermission(2))
+            .then(Commands.argument("biome", ResourceLocationArgument.id())
+                .suggests(SuggestionProviders.AVAILABLE_BIOMES)
                 .executes((context) -> displayTitle(context.getSource(), context.getArgument("biome", ResourceLocation.class)))));
     }
 
-    public static int displayTitle(CommandSource commandSource, ResourceLocation biomeId) throws CommandSyntaxException {
-        Biome biome = commandSource.getServer().func_244267_aX().getRegistry(Registry.BIOME_KEY)
+    public static int displayTitle(CommandSourceStack commandSource, ResourceLocation biomeId) throws CommandSyntaxException {
+        Biome biome = commandSource.getServer().registryAccess().registryOrThrow(Registry.BIOME_REGISTRY)
             .getOptional(biomeId)
             .orElseThrow(() -> BIOME_NOT_FOUND_EXCEPTION.create(biomeId));
 
-        ResourceLocation biomeBaseKey = commandSource.getServer().func_244267_aX().getRegistry(Registry.BIOME_KEY).getKey(biome);
-        String overrideBiomeNameKey = Util.makeTranslationKey(TravelersTitles.MOD_ID + ".biome", biomeBaseKey);
-        String normalBiomeNameKey = Util.makeTranslationKey("biome", biomeBaseKey);
+        ResourceLocation biomeBaseKey = commandSource.getServer().registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(biome);
+        String overrideBiomeNameKey = Util.makeDescriptionId(TravelersTitles.MOD_ID + ".biome", biomeBaseKey);
+        String normalBiomeNameKey = Util.makeDescriptionId("biome", biomeBaseKey);
 
         if (TravelersTitles.titleManager.blacklistedBiomes.contains(biomeBaseKey.toString())) {
-            commandSource.sendFeedback(new StringTextComponent("That biome is blacklisted, so its title won't normally show!"), false);
+            commandSource.sendSuccess(new TextComponent("That biome is blacklisted, so its title won't normally show!"), false);
         }
 
         if (biomeBaseKey != null) {
-            ITextComponent biomeTitle;
+            Component biomeTitle;
 
             // We will only display name if entry for biome found
-            if (LanguageMap.getInstance().func_230506_b_(overrideBiomeNameKey)) { // First, check for a special user-provided override intended for TT use
-                biomeTitle = new TranslationTextComponent(overrideBiomeNameKey);
-            } else if (LanguageMap.getInstance().func_230506_b_(normalBiomeNameKey)) { // Next, check for normal biome lang entry
-                biomeTitle = new TranslationTextComponent(normalBiomeNameKey);
+            if (Language.getInstance().has(overrideBiomeNameKey)) { // First, check for a special user-provided override intended for TT use
+                biomeTitle = new TranslatableComponent(overrideBiomeNameKey);
+            } else if (Language.getInstance().has(normalBiomeNameKey)) { // Next, check for normal biome lang entry
+                biomeTitle = new TranslatableComponent(normalBiomeNameKey);
             } else {
                 return 0; // No entry found
             }
@@ -59,10 +59,10 @@ public class BiomeTitleCommand {
             String overrideBiomeColorKey = overrideBiomeNameKey + ".color";
             String normalBiomeColorKey = normalBiomeNameKey + ".color";
             String biomeColorStr;
-            if (LanguageMap.getInstance().func_230506_b_(overrideBiomeColorKey)) {
-                biomeColorStr = LanguageMap.getInstance().func_230503_a_(overrideBiomeColorKey);
-            } else if (LanguageMap.getInstance().func_230506_b_(normalBiomeColorKey)) {
-                biomeColorStr = LanguageMap.getInstance().func_230503_a_(normalBiomeColorKey);
+            if (Language.getInstance().has(overrideBiomeColorKey)) {
+                biomeColorStr = Language.getInstance().getOrDefault(overrideBiomeColorKey);
+            } else if (Language.getInstance().has(normalBiomeColorKey)) {
+                biomeColorStr = Language.getInstance().getOrDefault(normalBiomeColorKey);
             } else {
                 biomeColorStr = TravelersTitles.titleManager.biomeTitleRenderer.titleDefaultTextColor;
             }

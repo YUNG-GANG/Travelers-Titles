@@ -1,23 +1,24 @@
 package com.yungnickyoung.minecraft.travelerstitles.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitles;
 import com.yungnickyoung.minecraft.travelerstitles.compat.WaystonesCompat;
 import com.yungnickyoung.minecraft.travelerstitles.config.TTConfig;
 import com.yungnickyoung.minecraft.travelerstitles.init.TTModSound;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.LanguageMap;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.ModList;
@@ -62,7 +63,7 @@ public class TitleRenderManager {
      */
     public void clientTick(final TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
-            if (!Minecraft.getInstance().isGamePaused()) {
+            if (!Minecraft.getInstance().isPaused()) {
                 dimensionTitleRenderer.tick();
                 WaystonesCompat.clientTick();
                 biomeTitleRenderer.tick();
@@ -74,9 +75,9 @@ public class TitleRenderManager {
      * Renders all titles.
      */
     public void renderTitles(final RenderGameOverlayEvent.Pre event) {
-        if (!Minecraft.getInstance().gameSettings.showDebugInfo && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+        if (!Minecraft.getInstance().options.renderDebug && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             float partialTicks = event.getPartialTicks();
-            MatrixStack matrixStack = event.getMatrixStack();
+            PoseStack matrixStack = event.getMatrixStack();
 
             // Render titles
             dimensionTitleRenderer.renderText(partialTicks, matrixStack);
@@ -89,12 +90,12 @@ public class TitleRenderManager {
      * Initializes rendering titles if conditions are met (e.g. player changed biome or dimension)
      */
     public void playerTick(final TickEvent.PlayerTickEvent event) {
-        PlayerEntity player = event.player;
-        BlockPos playerPos = event.player.getPosition();
-        World world = player.world;
+        Player player = event.player;
+        BlockPos playerPos = event.player.blockPosition();
+        Level world = player.level;
 
-        if (player instanceof ClientPlayerEntity && world != null && world.isBlockPresent(playerPos)) {
-            boolean isPlayerUnderground = world.getDimensionType().hasSkyLight() && !world.canBlockSeeSky(playerPos);
+        if (player instanceof LocalPlayer && world != null && world.isLoaded(playerPos)) {
+            boolean isPlayerUnderground = world.dimensionType().hasSkyLight() && !world.canSeeSky(playerPos);
 
             // Render dimension title
             updateDimensionTitle(world, player, isPlayerUnderground);
@@ -112,7 +113,7 @@ public class TitleRenderManager {
     }
 
     public void playerChangedDimension() {
-        // Reset biome cache on dimension change
+        // Reset biome cache on dimension change, if enabled
         if (
             TTConfig.biomes.enabled.get() &&
             TTConfig.biomes.resetBiomeCacheOnDimensionChange.get()
@@ -121,7 +122,7 @@ public class TitleRenderManager {
             biomeTitleRenderer.recentEntries.clear();
         }
 
-        // Reset waystones cache on dimension change
+        // Reset waystones cache on dimension change, if enabled
         if (
             ModList.get().isLoaded("waystones") &&
             TTConfig.waystones.enabled.get() &&
@@ -134,29 +135,29 @@ public class TitleRenderManager {
     /**
      * Updates the dimension title, color, and render timers if conditions are met.
      */
-    private void updateDimensionTitle(World world, PlayerEntity player, boolean isPlayerUnderground) {
+    private void updateDimensionTitle(Level world, Player player, boolean isPlayerUnderground) {
         if (isPlayerUnderground && TTConfig.dimensions.onlyUpdateAtSurface.get()) {
             return;
         }
 
-        DimensionType currDimension = world.getDimensionType();
+        DimensionType currDimension = world.dimensionType();
 
         if (dimensionTitleRenderer.enabled && !dimensionTitleRenderer.containsEntry(d -> d == currDimension)) {
             // Get dimension key
-            ResourceLocation dimensionBaseKey = world.getDimensionKey().getLocation();
-            String dimensionNameKey = Util.makeTranslationKey(TravelersTitles.MOD_ID, dimensionBaseKey);
+            ResourceLocation dimensionBaseKey = world.dimension().location();
+            String dimensionNameKey = Util.makeDescriptionId(TravelersTitles.MOD_ID, dimensionBaseKey);
 
             // Ignore blacklisted dimensions
             if (!blacklistedDimensions.contains(dimensionBaseKey.toString())) {
-                ITextComponent dimensionTitle;
-                dimensionTitle = LanguageMap.getInstance().func_230506_b_(dimensionNameKey)
-                    ? new TranslationTextComponent(dimensionNameKey)
-                    : new StringTextComponent("???"); // Display ??? for unknown dimensions;
+                Component dimensionTitle;
+                dimensionTitle = Language.getInstance().has(dimensionNameKey)
+                    ? new TranslatableComponent(dimensionNameKey)
+                    : new TextComponent("???"); // Display ??? for unknown dimensions
 
                 // Get color of text for dimension, if entry exists. Otherwise default to normal color
                 String dimensionColorKey = dimensionNameKey + ".color";
-                String dimensionColorStr = LanguageMap.getInstance().func_230506_b_(dimensionColorKey)
-                    ? LanguageMap.getInstance().func_230503_a_(dimensionColorKey)
+                String dimensionColorStr = Language.getInstance().has(dimensionColorKey)
+                    ? Language.getInstance().getOrDefault(dimensionColorKey)
                     : dimensionTitleRenderer.titleDefaultTextColor;
 
                 // Set display
@@ -173,31 +174,32 @@ public class TitleRenderManager {
     /**
      * Updates the biome title, color, and render timers if conditions are met.
      */
-    private void updateBiomeTitle(World world, BlockPos playerPos, PlayerEntity player, boolean isPlayerUnderground) {
-        if (isPlayerUnderground && TTConfig.biomes.onlyUpdateAtSurface.get()) {
+    private void updateBiomeTitle(Level world, BlockPos playerPos, Player player, boolean isPlayerUnderground) {
+        Biome currBiome = world.getBiome(playerPos);
+
+        if (isPlayerUnderground && TTConfig.biomes.onlyUpdateAtSurface.get() && currBiome.getBiomeCategory() != Biome.BiomeCategory.UNDERGROUND) {
             return;
         }
 
-        Biome currBiome = world.getBiome(playerPos);
-        ResourceLocation biomeBaseKey = world.func_241828_r().getRegistry(Registry.BIOME_KEY).getKey(currBiome);
+        ResourceLocation biomeBaseKey = world.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(currBiome);
 
         if (
             biomeTitleRenderer.enabled &&
             biomeTitleRenderer.cooldownTimer <= 0 &&
-            !biomeTitleRenderer.containsEntry(b -> world.func_241828_r().getRegistry(Registry.BIOME_KEY).getKey(b) == biomeBaseKey)
+            !biomeTitleRenderer.containsEntry(b -> world.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(b) == biomeBaseKey)
         ) {
-            String overrideBiomeNameKey = Util.makeTranslationKey(TravelersTitles.MOD_ID + ".biome", biomeBaseKey);
-            String normalBiomeNameKey = Util.makeTranslationKey("biome", biomeBaseKey);
+            String overrideBiomeNameKey = Util.makeDescriptionId(TravelersTitles.MOD_ID + ".biome", biomeBaseKey);
+            String normalBiomeNameKey = Util.makeDescriptionId("biome", biomeBaseKey);
 
             // Ignore blacklisted biomes
             if (biomeBaseKey != null && !blacklistedBiomes.contains(biomeBaseKey.toString())) {
-                ITextComponent biomeTitle;
+                Component biomeTitle;
 
                 // We will only display name if entry for biome found
-                if (LanguageMap.getInstance().func_230506_b_(overrideBiomeNameKey)) { // First, check for a special user-provided override intended for TT use
-                    biomeTitle = new TranslationTextComponent(overrideBiomeNameKey);
-                } else if (LanguageMap.getInstance().func_230506_b_(normalBiomeNameKey)) { // Next, check for normal biome lang entry
-                    biomeTitle = new TranslationTextComponent(normalBiomeNameKey);
+                if (Language.getInstance().has(overrideBiomeNameKey)) { // First, check for a special user-provided override intended for TT use
+                    biomeTitle = new TranslatableComponent(overrideBiomeNameKey);
+                } else if (Language.getInstance().has(normalBiomeNameKey)) { // Next, check for normal biome lang entry
+                    biomeTitle = new TranslatableComponent(normalBiomeNameKey);
                 } else {
                     return; // No entry found
                 }
@@ -206,10 +208,10 @@ public class TitleRenderManager {
                 String overrideBiomeColorKey = overrideBiomeNameKey + ".color";
                 String normalBiomeColorKey = normalBiomeNameKey + ".color";
                 String biomeColorStr;
-                if (LanguageMap.getInstance().func_230506_b_(overrideBiomeColorKey)) {
-                    biomeColorStr = LanguageMap.getInstance().func_230503_a_(overrideBiomeColorKey);
-                } else if (LanguageMap.getInstance().func_230506_b_(normalBiomeColorKey)) {
-                    biomeColorStr = LanguageMap.getInstance().func_230503_a_(normalBiomeColorKey);
+                if (Language.getInstance().has(overrideBiomeColorKey)) {
+                    biomeColorStr = Language.getInstance().getOrDefault(overrideBiomeColorKey);
+                } else if (Language.getInstance().has(normalBiomeColorKey)) {
+                    biomeColorStr = Language.getInstance().getOrDefault(normalBiomeColorKey);
                 } else {
                     biomeColorStr = biomeTitleRenderer.titleDefaultTextColor;
                 }
@@ -236,7 +238,7 @@ public class TitleRenderManager {
      *
      * @return true if waystone title is currently being displayed
      */
-    private boolean updateWaystoneTitle(PlayerEntity player, boolean isPlayerUnderground) {
+    private boolean updateWaystoneTitle(Player player, boolean isPlayerUnderground) {
         if (isPlayerUnderground && TTConfig.waystones.onlyUpdateAtSurface.get()) {
             return false;
         }

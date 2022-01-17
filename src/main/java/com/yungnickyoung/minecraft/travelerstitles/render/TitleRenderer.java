@@ -1,14 +1,14 @@
 package com.yungnickyoung.minecraft.travelerstitles.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitles;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.ColorHelper;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
@@ -16,8 +16,8 @@ import java.util.function.Predicate;
 
 public class TitleRenderer<T> {
     public final LinkedList<T> recentEntries = new LinkedList<>();
-    public ITextComponent displayedTitle = null;
-    public ITextComponent displayedSubTitle = null;
+    public Component displayedTitle = null;
+    public Component displayedSubTitle = null;
     public int titleTimer = 0;
     public int cooldownTimer = 0;
 
@@ -62,8 +62,7 @@ public class TitleRenderer<T> {
         this.isTextCentered = centerText;
     }
 
-    @SuppressWarnings("deprecation")
-    public void renderText(float partialTicks, MatrixStack matrixStack) {
+    public void renderText(float partialTicks, PoseStack poseStack) {
         if (displayedTitle != null && titleTimer > 0) {
             float age = (float) titleTimer - partialTicks;
             int opacity = 255;
@@ -76,24 +75,24 @@ public class TitleRenderer<T> {
                 opacity = (int) (age * 255.0F / (float) titleFadeOutTicks);
             }
 
-            opacity = MathHelper.clamp(opacity, 0, 255);
+            opacity = Mth.clamp(opacity, 0, 255);
             if (opacity > 8) {
                 // Set up render system
-                RenderSystem.pushMatrix();
+                poseStack.pushPose();
                 if (this.isTextCentered)
-                    RenderSystem.translatef((float) (Minecraft.getInstance().getMainWindow().getScaledWidth() / 2), (float) (Minecraft.getInstance().getMainWindow().getScaledHeight() / 2), 0.0F);
+                    poseStack.translate(Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2D, (Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2D), 0);
                 RenderSystem.enableBlend();
                 RenderSystem.defaultBlendFunc();
 
                 // Render title
-                RenderSystem.pushMatrix();
-                RenderSystem.scalef(titleTextSize, titleTextSize, titleTextSize);
+                poseStack.pushPose();
+                poseStack.scale(titleTextSize, titleTextSize, titleTextSize);
                 int alpha = opacity << 24 & 0xFF000000;
-                FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-                int titleWidth = fontRenderer.getStringPropertyWidth(displayedTitle);
+                Font fontRenderer = Minecraft.getInstance().font;
+                int titleWidth = fontRenderer.width(displayedTitle);
 
                 // Currently does nothing?
-                drawTextBackground(matrixStack, -10, titleWidth, titleTextcolor | alpha);
+                drawTextBackground(poseStack, -10, titleWidth, titleTextcolor | alpha);
 
                 // Determine x offset
                 float xOffset = this.isTextCentered
@@ -101,26 +100,26 @@ public class TitleRenderer<T> {
                     : this.titleXOffset;
 
                 if (showTextShadow)
-                    fontRenderer.func_243246_a(matrixStack, displayedTitle, xOffset, titleYOffset, titleTextcolor | alpha);
+                    fontRenderer.drawShadow(poseStack, displayedTitle, xOffset, titleYOffset, titleTextcolor | alpha);
                 else
-                    fontRenderer.func_243248_b(matrixStack, displayedTitle, xOffset, titleYOffset, titleTextcolor | alpha);
-                RenderSystem.popMatrix();
+                    fontRenderer.draw(poseStack, displayedTitle, xOffset, titleYOffset, titleTextcolor | alpha);
+                poseStack.popPose();
 
                 // Subtitle render. Currently unused
                 if (displayedSubTitle != null) {
-                    RenderSystem.pushMatrix();
-                    RenderSystem.scalef(1.3F, 1.3F, 1.3F);
-                    int subtitleWidth = fontRenderer.getStringPropertyWidth(displayedSubTitle);
-                    drawTextBackground(matrixStack, 5, subtitleWidth, 0xFFFFFF | alpha);
+                    poseStack.pushPose();
+                    poseStack.scale(1.3F, 1.3F, 1.3F);
+                    int subtitleWidth = fontRenderer.width(displayedSubTitle);
+                    drawTextBackground(poseStack, 5, subtitleWidth, 0xFFFFFF | alpha);
                     if (showTextShadow)
-                        fontRenderer.func_243246_a(matrixStack, displayedSubTitle, (float) (-subtitleWidth / 2), -35, 0xFFFFFF | alpha);
+                        fontRenderer.drawShadow(poseStack, displayedSubTitle, (float) (-subtitleWidth / 2), -35, 0xFFFFFF | alpha);
                     else
-                        fontRenderer.func_243248_b(matrixStack, displayedSubTitle, (float) (-subtitleWidth / 2), -35, 0xFFFFFF | alpha);
-                    RenderSystem.popMatrix();
+                        fontRenderer.draw(poseStack, displayedSubTitle, (float) (-subtitleWidth / 2), -35, 0xFFFFFF | alpha);
+                    poseStack.popPose();
                 }
 
                 RenderSystem.disableBlend();
-                RenderSystem.popMatrix();
+                poseStack.popPose();
             }
         }
     }
@@ -137,7 +136,7 @@ public class TitleRenderer<T> {
         }
     }
 
-    public void displayTitle(ITextComponent titleText, @Nullable ITextComponent subtitleText) {
+    public void displayTitle(Component titleText, @Nullable Component subtitleText) {
         displayedTitle = titleText;
         titleTimer = titleFadeInTicks + titleDisplayTime + titleFadeOutTicks;
         if (subtitleText != null)
@@ -171,11 +170,11 @@ public class TitleRenderer<T> {
         return this.recentEntries.stream().anyMatch(entryMatchPredicate);
     }
 
-    protected void drawTextBackground(MatrixStack mStack, int yOffset, int width, int color) {
-        int textBackgroundColor = Minecraft.getInstance().gameSettings.getTextBackgroundColor(0.0F);
+    protected void drawTextBackground(PoseStack mStack, int yOffset, int width, int color) {
+        int textBackgroundColor = Minecraft.getInstance().options.getBackgroundColor(0.0F);
         if (textBackgroundColor != 0) {
             int xOffset = -width / 2;
-            AbstractGui.fill(mStack, xOffset - 2, yOffset - 2, xOffset + width + 2, yOffset + 9 + 2, ColorHelper.PackedColor.blendColors(textBackgroundColor, color));
+            GuiComponent.fill(mStack, xOffset - 2, yOffset - 2, xOffset + width + 2, yOffset + 9 + 2, FastColor.ARGB32.multiply(textBackgroundColor, color));
         }
     }
 }

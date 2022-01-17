@@ -1,28 +1,33 @@
-modLoader="javafml"
-loaderVersion="[35,)"
+modLoader="javafml" #mandatory
+loaderVersion="[39,)"
 license="LGPLv3"
-issueTrackerURL="https://github.com/yungnickyoung/Travelers_Titles/issues"
+issueTrackerURL="https://github.com/yungnickyoung/Travelers-Titles"
 
 [[mods]]
-modId="${modId}"
-version="${version}"
-displayName="${modName}"
-credits="${modCredits}"
-authors="${modAuthor}"
-description="${modDescription}"
-logoFile="logo.png"
-displayURL="https://www.curseforge.com/minecraft/mc-mods/travelers-titles"
+    modId="travelerstitles"
+    version="${file.jarVersion}"
+	displayName="Traveler's Titles"
+    credits="Thanks so much to all my patrons!"
+    authors="YUNGNICKYOUNG"
+    description="Epic, RPG-like titles when entering biomes & dimensions"
+    logoFile="logo.png"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/travelers-titles"
 
 [[dependencies.travelerstitles]]
-modId="forge"
-mandatory=true
-versionRange="[35,)"
-ordering="NONE"
-side="CLIENT"
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18.1,1.19)"
 
 [[dependencies.travelerstitles]]
-modId="yungsapi"
-versionRange="[1.16.4-Forge-11,)"
-mandatory=true
-ordering="NONE"
-side="CLIENT"
+    modId="forge"
+    mandatory=true
+    versionRange="[39.0.0,)"
+    ordering="NONE"
+    side="SERVER"
+
+[[dependencies.travelerstitles]]
+    modId="yungsapi"
+    versionRange="[1.18.1-Forge-23,)"
+    mandatory=true
+    ordering="NONE"
+    side="BOTH"
