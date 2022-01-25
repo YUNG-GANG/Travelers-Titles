@@ -166,7 +166,7 @@ public class TitleRenderer<T> {
         }
     }
 
-    public boolean containsEntry(Predicate<T> entryMatchPredicate) {
+    public boolean matchesAnyRecentEntry(Predicate<T> entryMatchPredicate) {
         return this.recentEntries.stream().anyMatch(entryMatchPredicate);
     }
 

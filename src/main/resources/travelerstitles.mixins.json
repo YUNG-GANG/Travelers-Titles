@@ -8,5 +8,11 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "MinecraftClientTickMixin",
+    "RenderGuiTickMixin",
+    "EntityChangeDimensionMixin",
+    "LocalPlayerTickMixin"
+  ]
 }

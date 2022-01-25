@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.travelerstitles.compat;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.yungnickyoung.minecraft.travelerstitles.TravelersTitles;
 import com.yungnickyoung.minecraft.travelerstitles.config.ConfigWaystones;
 import com.yungnickyoung.minecraft.travelerstitles.config.TTConfig;
 import com.yungnickyoung.minecraft.travelerstitles.init.TTModSound;
@@ -55,7 +56,7 @@ public class WaystonesCompat {
         if (waystoneUpdateTimer % 10 == 0) {
             String playerDimension = event.player.level.dimension().location().toString();
             BlockPos playerPos = event.player.blockPosition();
-            double minDist = Double.MAX_VALUE;
+            double minSqDist = Double.MAX_VALUE;
 
             // Iterate waystones, finding closest one
             for (IWaystone waystone : knownWaystones) {
@@ -66,9 +67,9 @@ public class WaystonesCompat {
 
                 // Calculate distance for waystones in same dimension as player.
                 if (playerDimension.equals(waystoneDimension)) {
-                    double distance = waystone.getPos().distSqr(playerPos);
-                    if (distance < minDist) {
-                        minDist = distance;
+                    double sqDistance = waystone.getPos().distSqr(playerPos);
+                    if (sqDistance < minSqDist) {
+                        minSqDist = sqDistance;
                         closestWaystone = waystone;
                     }
                 }
@@ -76,7 +77,7 @@ public class WaystonesCompat {
 
             // Only save closest waystone if it is within range
             int range = TTConfig.waystones.range.get();
-            if (minDist > range * range) {
+            if (minSqDist > range * range) {
                 closestWaystone = null;
             }
         }
@@ -92,20 +93,22 @@ public class WaystonesCompat {
         if (
             waystoneTitleRenderer.enabled &&
             waystoneTitleRenderer.cooldownTimer <= 0 &&
-            !waystoneTitleRenderer.containsEntry(w -> w.getName().equals(closestWaystone.getName()))
+            !waystoneTitleRenderer.matchesAnyRecentEntry(w -> w.getName().equals(closestWaystone.getName()))
         ) {
             if (
                 waystoneTitleRenderer.displayedTitle == null ||
                 !closestWaystone.getName().equals(waystoneTitleRenderer.displayedTitle.getString())
-            ) {
-                // We only need to update if title has changed
+            ) { // We only need to update if title has changed
                 waystoneTitleRenderer.setColor(waystoneTitleRenderer.titleDefaultTextColor);
                 waystoneTitleRenderer.displayTitle(new TextComponent(closestWaystone.getName()), null);
                 waystoneTitleRenderer.cooldownTimer = TTConfig.waystones.textCooldownTime.get();
                 waystoneTitleRenderer.addRecentEntry(closestWaystone);
 
-                // Play biome entry sound
-                player.playSound(TTModSound.WAYSTONE, TTConfig.sound.waystoneVolume.get().floatValue(), TTConfig.sound.waystonePitch.get().floatValue());
+                // Play waystone entry sound if we haven't just changed dimensions.
+                // This ensures the waystone sound won't overlap with the dimension sound.
+                if (TravelersTitles.titleManager.dimensionTitleRenderer.titleTimer <= 0) {
+                    player.playSound(TTModSound.WAYSTONE, TTConfig.sound.waystoneVolume.get().floatValue(), TTConfig.sound.waystonePitch.get().floatValue());
+                }
             }
         }
         return waystoneTitleRenderer.titleTimer > 0;
@@ -122,6 +125,11 @@ public class WaystonesCompat {
     public static void reset() {
         waystoneTitleRenderer.clearTimer();
         waystoneTitleRenderer.recentEntries.clear();
+        waystoneTitleRenderer.displayedTitle = null;
+    }
+
+    public static boolean isRendering() {
+        return waystoneTitleRenderer.titleTimer > 0;
     }
 
     public static void updateRendererFromConfig(ConfigWaystones config) {
