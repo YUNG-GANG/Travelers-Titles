@@ -1,63 +1,18 @@
 package com.yungnickyoung.minecraft.travelerstitles.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
 public class ConfigSound {
-    public final ForgeConfigSpec.ConfigValue<Double> biomeVolume;
-    public final ForgeConfigSpec.ConfigValue<Double> biomePitch;
-    public final ForgeConfigSpec.ConfigValue<Double> dimensionVolume;
-    public final ForgeConfigSpec.ConfigValue<Double> dimensionPitch;
-    public final ForgeConfigSpec.ConfigValue<Double> waystoneVolume;
-    public final ForgeConfigSpec.ConfigValue<Double> waystonePitch;
+    @ConfigEntry.Gui.Tooltip()
+    public float biomeVolume = 1.0f;
 
-    public ConfigSound(final ForgeConfigSpec.Builder BUILDER) {
-        BUILDER
-            .comment(
-                "##########################################################################################################\n" +
-                "# Sound settings. These will only be used if you add custom sounds via a resource pack.\n" +
-                "# For information on how to do this, visit the CurseForge page.\n" +
-                "##########################################################################################################")
-            .push("Custom Sound Settings");
+    @ConfigEntry.Gui.Tooltip()
+    public float biomePitch = 1.0f;
 
-        biomeVolume = BUILDER
-            .comment(
-                " The volume of the sound that plays when a biome title displays.\n" +
-                " Default: 1.0")
-            .define("Biome Sound Effect Volume", 1.0);
+    @ConfigEntry.Gui.Tooltip()
+    public float dimensionVolume = 1.0f;
 
-        biomePitch = BUILDER
-            .comment(
-                " The pitch of the sound that plays when a biome title displays.\n" +
-                " Default: 1.0")
-            .define("Biome Sound Effect Pitch", 1.0);
-
-        dimensionVolume = BUILDER
-            .comment(
-                " The volume of the sound that plays when a dimension title displays.\n" +
-                " Default: 1.0")
-            .define("Dimension Sound Effect Volume", 1.0);
-
-        dimensionPitch = BUILDER
-            .comment(
-                " The pitch of the sound that plays when a dimension title displays.\n" +
-                " Default: 1.0")
-            .define("Dimension Sound Effect Pitch", 1.0);
-
-        waystoneVolume = BUILDER
-            .comment(
-                " The volume of the sound that plays when a Waystone title displays.\n" +
-                " The Waystones mod must be installed for this to have any effect.\n" +
-                " Default: 1.0")
-            .define("Waystone Sound Effect Volume", 1.0);
-
-        waystonePitch = BUILDER
-            .comment(
-                " The pitch of the sound that plays when a Waystone title displays.\n" +
-                " The Waystones mod must be installed for this to have any effect.\n" +
-                " Default: 1.0")
-            .define("Waystone Sound Effect Pitch", 1.0);
-
-        BUILDER.pop();
-    }
+    @ConfigEntry.Gui.Tooltip()
+    public float dimensionPitch = 1.0f;
 }
 

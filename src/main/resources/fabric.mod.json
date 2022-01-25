@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "travelerstitles",
+  "version": "${version}",
+  "name": "Traveler's Titles",
+  "description": "Epic, RPG-like titles when entering biomes & dimensions",
+  "authors": [
+    "YUNGNICKYOUNG"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/travelers-titles-fabric",
+    "sources": "https://github.com/yungnickyoung/Travelers-Titles",
+    "issues": "https://github.com/yungnickyoung/Travelers-Titles/issues",
+    "discord": "discord.gg/rns3beq"
+  },
+  "license": "LGPLv3",
+  "icon": "logo.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.yungnickyoung.minecraft.travelerstitles.TravelersTitles"
+    ],
+    "modmenu": [
+      "com.yungnickyoung.minecraft.travelerstitles.config.gui.TTModMenu"
+    ]
+  },
+  "mixins": [
+    "travelerstitles.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.0",
+    "fabric": ">=0.43.1",
+    "minecraft": ">=1.18",
+    "cloth-config2": ">=6.0.42",
+    "java": ">=17",
+    "yungsapi": ">=1.18-Fabric-35"
+  }
+}

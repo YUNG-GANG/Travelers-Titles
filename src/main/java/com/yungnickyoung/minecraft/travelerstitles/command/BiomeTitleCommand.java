@@ -4,7 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitles;
-import com.yungnickyoung.minecraft.travelerstitles.config.TTConfig;
 import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -70,7 +69,7 @@ public class BiomeTitleCommand {
             // Set display
             TravelersTitles.titleManager.biomeTitleRenderer.setColor(biomeColorStr);
             TravelersTitles.titleManager.biomeTitleRenderer.displayTitle(biomeTitle, null);
-            TravelersTitles.titleManager.biomeTitleRenderer.cooldownTimer = TTConfig.biomes.textCooldownTime.get();
+            TravelersTitles.titleManager.biomeTitleRenderer.cooldownTimer = TravelersTitles.CONFIG.travelersTitles.biomes.textCooldownTime;
 
             return 1;
         }

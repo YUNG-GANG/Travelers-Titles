@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 
-import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.function.Predicate;
 
@@ -34,6 +33,9 @@ public class TitleRenderer<T> {
     public float titleXOffset;
     public float titleYOffset;
     public boolean isTextCentered;
+
+    public TitleRenderer() {
+    }
 
     public TitleRenderer(
         int maxRecentListSize,
@@ -136,7 +138,7 @@ public class TitleRenderer<T> {
         }
     }
 
-    public void displayTitle(Component titleText, @Nullable Component subtitleText) {
+    public void displayTitle(Component titleText, Component subtitleText) {
         displayedTitle = titleText;
         titleTimer = titleFadeInTicks + titleDisplayTime + titleFadeOutTicks;
         if (subtitleText != null)
