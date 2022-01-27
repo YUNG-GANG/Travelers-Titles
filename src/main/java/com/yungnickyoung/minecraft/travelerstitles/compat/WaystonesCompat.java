@@ -87,22 +87,25 @@ public class WaystonesCompat {
      * Initializes rendering the nearest waystone title if conditions are met.
      */
     public static boolean updateWaystoneTitle(Player player) {
+        // Store copy of closest waystone since it could become null at any time (from updateClosestWaystone event)
+        IWaystone _closestWaystone = closestWaystone;
+
         // Invalid or missing closest waystone
-        if (closestWaystone == null || !closestWaystone.hasName()) return waystoneTitleRenderer.titleTimer > 0;
+        if (_closestWaystone == null || !_closestWaystone.hasName()) return waystoneTitleRenderer.titleTimer > 0;
 
         if (
             waystoneTitleRenderer.enabled &&
             waystoneTitleRenderer.cooldownTimer <= 0 &&
-            !waystoneTitleRenderer.matchesAnyRecentEntry(w -> w.getName().equals(closestWaystone.getName()))
+            !waystoneTitleRenderer.matchesAnyRecentEntry(w -> w.getName().equals(_closestWaystone.getName()))
         ) {
             if (
                 waystoneTitleRenderer.displayedTitle == null ||
-                !closestWaystone.getName().equals(waystoneTitleRenderer.displayedTitle.getString())
+                !_closestWaystone.getName().equals(waystoneTitleRenderer.displayedTitle.getString())
             ) { // We only need to update if title has changed
                 waystoneTitleRenderer.setColor(waystoneTitleRenderer.titleDefaultTextColor);
-                waystoneTitleRenderer.displayTitle(new TextComponent(closestWaystone.getName()), null);
+                waystoneTitleRenderer.displayTitle(new TextComponent(_closestWaystone.getName()), null);
                 waystoneTitleRenderer.cooldownTimer = TTConfig.waystones.textCooldownTime.get();
-                waystoneTitleRenderer.addRecentEntry(closestWaystone);
+                waystoneTitleRenderer.addRecentEntry(_closestWaystone);
 
                 // Play waystone entry sound if we haven't just changed dimensions.
                 // This ensures the waystone sound won't overlap with the dimension sound.
