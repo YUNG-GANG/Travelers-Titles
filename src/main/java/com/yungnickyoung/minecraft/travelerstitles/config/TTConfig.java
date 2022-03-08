@@ -8,7 +8,7 @@ public class TTConfig {
 
     public static final ConfigBiomes biomes;
     public static final ConfigDimensions dimensions;
-    public static final ConfigWaystones waystones;
+//    public static final ConfigWaystones waystones;
     public static final ConfigSound sound;
 
     static {
@@ -16,7 +16,7 @@ public class TTConfig {
 
         biomes = new ConfigBiomes(BUILDER);
         dimensions = new ConfigDimensions(BUILDER);
-        waystones = new ConfigWaystones(BUILDER);
+//        waystones = new ConfigWaystones(BUILDER);
         sound = new ConfigSound(BUILDER);
 
         BUILDER.pop();

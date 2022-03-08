@@ -2,7 +2,7 @@ package com.yungnickyoung.minecraft.travelerstitles.init;
 
 import com.google.common.collect.Lists;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitles;
-import com.yungnickyoung.minecraft.travelerstitles.compat.WaystonesCompat;
+//import com.yungnickyoung.minecraft.travelerstitles.compat.WaystonesCompat;
 import com.yungnickyoung.minecraft.travelerstitles.config.TTConfig;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
@@ -65,7 +65,7 @@ public class TTModConfig {
         TravelersTitles.titleManager.dimensionTitleRenderer.isTextCentered = TTConfig.dimensions.centerText.get();
 
         // Waystones
-        WaystonesCompat.updateRendererFromConfig(TTConfig.waystones);
+//        WaystonesCompat.updateRendererFromConfig(TTConfig.waystones);
 
         // Parse & save biome blacklist
         String rawStringofList = TTConfig.biomes.biomeBlacklist.get();
