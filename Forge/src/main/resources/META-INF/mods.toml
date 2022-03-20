@@ -1,0 +1,33 @@
+modLoader="javafml" #mandatory
+loaderVersion="[40,)"
+license="LGPLv3"
+issueTrackerURL="https://github.com/yungnickyoung/Travelers-Titles"
+
+[[mods]]
+    modId="travelerstitles"
+    version="${file.jarVersion}"
+	displayName="Traveler's Titles"
+    credits="Thanks so much to all my patrons!"
+    authors="YUNGNICKYOUNG"
+    description="Epic, RPG-like titles when entering biomes & dimensions"
+    logoFile="icon.png"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/travelers-titles"
+
+[[dependencies.travelerstitles]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18.1,1.19)"
+
+[[dependencies.travelerstitles]]
+    modId="forge"
+    mandatory=true
+    versionRange="[40.0.8,)"
+    ordering="NONE"
+    side="SERVER"
+
+[[dependencies.travelerstitles]]
+    modId="yungsapi"
+    versionRange="[1.18.2-Forge-2.0.7,)"
+    mandatory=true
+    ordering="NONE"
+    side="BOTH"
