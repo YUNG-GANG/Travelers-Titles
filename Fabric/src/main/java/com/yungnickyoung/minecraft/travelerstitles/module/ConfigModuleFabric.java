@@ -19,6 +19,7 @@ public class ConfigModuleFabric {
         AutoConfig.getConfigHolder(TTConfigFabric.class).registerSaveListener(ConfigModuleFabric::updateConfig);
         AutoConfig.getConfigHolder(TTConfigFabric.class).registerLoadListener(ConfigModuleFabric::updateConfig);
         fabricConfig = AutoConfig.getConfigHolder(TTConfigFabric.class).get();
+        updateConfig();
     }
 
     public static void updateConfig() {
