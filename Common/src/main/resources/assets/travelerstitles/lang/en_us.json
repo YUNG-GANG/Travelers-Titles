@@ -23,6 +23,11 @@
   "travelerstitles.blue_skies.everdawn.color": "db6e2a",
   "travelerstitles.the_afterlight.the_afterlight": "The Afterlight",
   "travelerstitles.the_afterlight.the_afterlight.color": "0fd3d6",
+  "travelerstitles.lobby.fishing_dimension": "Fishing Dimension",
+  "travelerstitles.lobby.gaming_dimension": "Gaming Dimension",
+  "travelerstitles.lobby.lobby_dimension": "Lobby",
+  "travelerstitles.lobby.mining_dimension": "Mining Dimension",
+  "travelerstitles.lobby.void_dimension": "Void Dimension",
 
   "biome.terralith.alpha_islands": "Alpha Islands",
   "biome.terralith.alpha_islands_winter": "Alpha Islands (Winter)",
