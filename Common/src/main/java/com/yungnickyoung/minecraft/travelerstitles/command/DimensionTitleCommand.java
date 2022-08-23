@@ -9,8 +9,6 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 
@@ -28,13 +26,13 @@ public class DimensionTitleCommand {
         String dimensionNameKey = Util.makeDescriptionId(TravelersTitlesCommon.MOD_ID, dimensionBaseKey);
 
         if (TravelersTitlesCommon.CONFIG.dimensions.dimensionBlacklist.contains(dimensionBaseKey.toString())) {
-            commandSource.sendSuccess(new TextComponent("That dimension is blacklisted, so its title won't normally show!"), false);
+            commandSource.sendSuccess(Component.literal("That dimension is blacklisted, so its title won't normally show!"), false);
         }
 
         Component dimensionTitle;
         dimensionTitle = Language.getInstance().has(dimensionNameKey)
-            ? new TranslatableComponent(dimensionNameKey)
-            : new TextComponent("???"); // Display ??? for unknown dimensions;
+            ? Component.translatable(dimensionNameKey)
+            : Component.literal("???"); // Display ??? for unknown dimensions;
 
         // Get color of text for dimension, if entry exists. Otherwise default to normal color
         String dimensionColorKey = dimensionNameKey + ".color";

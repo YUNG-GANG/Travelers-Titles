@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
 import com.yungnickyoung.minecraft.travelerstitles.module.CompatModule;
 import com.yungnickyoung.minecraft.travelerstitles.module.SoundModule;
+import com.yungnickyoung.minecraft.travelerstitles.module.TagModule;
 import com.yungnickyoung.minecraft.travelerstitles.services.Services;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -13,12 +14,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.dimension.DimensionType;
 
 public class TitleRenderManager {
@@ -133,8 +133,8 @@ public class TitleRenderManager {
             if (!TravelersTitlesCommon.CONFIG.dimensions.dimensionBlacklist.contains(dimensionBaseKey.toString())) {
                 Component dimensionTitle;
                 dimensionTitle = Language.getInstance().has(dimensionNameKey)
-                    ? new TranslatableComponent(dimensionNameKey)
-                    : new TextComponent("???"); // Display ??? for unknown dimensions
+                    ? Component.translatable(dimensionNameKey)
+                    : Component.literal("???"); // Display ??? for unknown dimensions
 
                 // Get color of text for dimension, if entry exists. Otherwise default to normal color
                 String dimensionColorKey = dimensionNameKey + ".color";
@@ -159,7 +159,8 @@ public class TitleRenderManager {
     private void updateBiomeTitle(Level world, BlockPos playerPos, Player player, boolean isPlayerUnderground) {
         Holder<Biome> biomeHolder = world.getBiome(playerPos);
 
-        if (isPlayerUnderground && TravelersTitlesCommon.CONFIG.biomes.onlyUpdateAtSurface && Biome.getBiomeCategory(biomeHolder) != Biome.BiomeCategory.UNDERGROUND) {
+        boolean isUndergroundBiome = biomeHolder.is(Biomes.LUSH_CAVES) || biomeHolder.is(Biomes.DRIPSTONE_CAVES) || biomeHolder.is(TagModule.IS_UNDERGROUND);
+        if (isPlayerUnderground && TravelersTitlesCommon.CONFIG.biomes.onlyUpdateAtSurface && !isUndergroundBiome) {
             return;
         }
 
@@ -179,9 +180,9 @@ public class TitleRenderManager {
 
                 // We will only display name if entry for biome found
                 if (Language.getInstance().has(overrideBiomeNameKey)) { // First, check for a special user-provided override intended for TT use
-                    biomeTitle = new TranslatableComponent(overrideBiomeNameKey);
+                    biomeTitle = Component.translatable(overrideBiomeNameKey);
                 } else if (Language.getInstance().has(normalBiomeNameKey)) { // Next, check for normal biome lang entry
-                    biomeTitle = new TranslatableComponent(normalBiomeNameKey);
+                    biomeTitle = Component.translatable(normalBiomeNameKey);
                 } else {
                     return; // No entry found
                 }

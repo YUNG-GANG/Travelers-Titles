@@ -8,7 +8,7 @@ import com.yungnickyoung.minecraft.travelerstitles.render.TitleRenderer;
 import net.blay09.mods.waystones.api.IWaystone;
 import net.blay09.mods.waystones.api.KnownWaystonesEvent;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -99,7 +99,7 @@ public class ForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
                             !_closestWaystone.getName().equals(waystoneTitleRenderer.displayedTitle.getString())
             ) { // We only need to update if title has changed
                 waystoneTitleRenderer.setColor(waystoneTitleRenderer.titleDefaultTextColor);
-                waystoneTitleRenderer.displayTitle(new TextComponent(_closestWaystone.getName()), null);
+                waystoneTitleRenderer.displayTitle(Component.literal(_closestWaystone.getName()), null);
                 waystoneTitleRenderer.cooldownTimer = TravelersTitlesCommon.CONFIG.waystones.textCooldownTime;
                 waystoneTitleRenderer.addRecentEntry(_closestWaystone);
 

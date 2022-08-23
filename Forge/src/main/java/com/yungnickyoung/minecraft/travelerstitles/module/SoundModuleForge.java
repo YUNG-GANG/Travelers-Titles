@@ -1,27 +1,19 @@
 package com.yungnickyoung.minecraft.travelerstitles.module;
 
-import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.core.Registry;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.RegisterEvent;
 
 public class SoundModuleForge {
     public static void init() {
-        MinecraftForge.EVENT_BUS.addGenericListener(SoundEvent.class, SoundModuleForge::registerSoundEvents);
-        SoundModule.BIOME = createSoundEvent("biome");
-        SoundModule.DIMENSION = createSoundEvent("dimension");
-        SoundModule.WAYSTONE = createSoundEvent("waystone");
+        MinecraftForge.EVENT_BUS.addListener(SoundModuleForge::registerSoundEvents);
     }
 
-    private static SoundEvent createSoundEvent(final String soundName) {
-        final ResourceLocation id = new ResourceLocation(TravelersTitlesCommon.MOD_ID, soundName);
-        return new SoundEvent(id).setRegistryName(id);
-    }
-
-    private static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
-        event.getRegistry().register(SoundModule.BIOME);
-        event.getRegistry().register(SoundModule.DIMENSION);
-        event.getRegistry().register(SoundModule.WAYSTONE);
+    private static void registerSoundEvents(final RegisterEvent event) {
+        event.register(Registry.SOUND_EVENT_REGISTRY, helper -> {
+            helper.register(SoundModule.BIOME.getLocation(), SoundModule.BIOME);
+            helper.register(SoundModule.DIMENSION.getLocation(), SoundModule.DIMENSION);
+            helper.register(SoundModule.WAYSTONE.getLocation(), SoundModule.WAYSTONE);
+        });
     }
 }

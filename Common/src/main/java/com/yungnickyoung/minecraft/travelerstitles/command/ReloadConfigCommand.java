@@ -6,7 +6,7 @@ import com.yungnickyoung.minecraft.travelerstitles.module.CompatModule;
 import com.yungnickyoung.minecraft.travelerstitles.services.Services;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 public class ReloadConfigCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -25,7 +25,7 @@ public class ReloadConfigCommand {
         if (CompatModule.isWaystonesLoaded) {
             Services.WAYSTONES.reset();
         }
-        commandSource.sendSuccess(new TextComponent("Loading changes from Traveler's Titles config..."), false);
+        commandSource.sendSuccess(Component.literal("Loading changes from Traveler's Titles config..."), false);
         return 1;
     }
 }
