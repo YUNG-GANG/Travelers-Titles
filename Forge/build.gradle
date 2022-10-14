@@ -89,6 +89,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     implementation fg.deobf("com.yungnickyoung.minecraft.yungsapi:YungsApi:${minecraft_version}-Forge-${yungsapi_version}")
+//    implementation fg.deobf("com.yungnickyoung.minecraft.yungsapi:YungsApi:${minecraft_version}-Forge-3.7.3-beta0")
     implementation fg.deobf("curse.maven:waystones-245755:${waystones_fileid_forge}")
     implementation fg.deobf("curse.maven:balm-531761:${balm_fileid_forge}")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
@@ -101,9 +102,20 @@ tasks.withType(JavaCompile) {
 
 processResources {
     from project(":Common").sourceSets.main.resources
+    inputs.property "version", project.version
+    inputs.property "yungsapi_version", project.yungsapi_version
+    inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "mod_description", project.mod_description
+    inputs.property "mod_full_name", project.mod_full_name
+    inputs.property "mod_id", project.mod_id
 
-    filesMatching('*.mixins.json') {
-        expand "refmap_target": mod_id + "."
+    filesMatching("META-INF/mods.toml") {
+        expand "version": project.version,
+                "yungsapi_version": project.yungsapi_version,
+                "minecraft_version": project.minecraft_version,
+                "mod_description": project.mod_description,
+                "mod_full_name": project.mod_full_name,
+                "mod_id": project.mod_id
     }
 }
 

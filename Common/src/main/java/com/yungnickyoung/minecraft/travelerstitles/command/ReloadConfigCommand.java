@@ -4,16 +4,17 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
 import com.yungnickyoung.minecraft.travelerstitles.module.CompatModule;
 import com.yungnickyoung.minecraft.travelerstitles.services.Services;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 
 public class ReloadConfigCommand {
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection environment) {
         dispatcher.register(Commands
             .literal("tt_reload")
             .requires((source) -> source.hasPermission(2))
-            .executes(context -> reloadConfig(context.getSource())));
+            .executes(ctx -> reloadConfig(ctx.getSource())));
     }
 
     public static int reloadConfig(CommandSourceStack commandSource) {

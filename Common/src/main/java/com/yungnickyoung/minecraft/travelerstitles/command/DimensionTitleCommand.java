@@ -4,6 +4,7 @@ package com.yungnickyoung.minecraft.travelerstitles.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
 import net.minecraft.Util;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.DimensionArgument;
@@ -13,11 +14,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 
 public class DimensionTitleCommand {
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection environment) {
         dispatcher.register(Commands
             .literal("dimensiontitle").requires((source) -> source.hasPermission(2))
             .then(Commands.argument("dimension", DimensionArgument.dimension())
-                .executes((context) -> displayTitle(context.getSource(), DimensionArgument.getDimension(context, "dimension")))));
+                .executes((ctx) -> displayTitle(ctx.getSource(), DimensionArgument.getDimension(ctx, "dimension")))));
     }
 
     public static int displayTitle(CommandSourceStack commandSource, ServerLevel world) {

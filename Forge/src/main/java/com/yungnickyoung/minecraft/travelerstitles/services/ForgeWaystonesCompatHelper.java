@@ -106,7 +106,7 @@ public class ForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
                 // Play waystone entry sound if we haven't just changed dimensions.
                 // This ensures the waystone sound won't overlap with the dimension sound.
                 if (TravelersTitlesCommon.titleManager.dimensionTitleRenderer.titleTimer <= 0) {
-                    player.playSound(SoundModule.WAYSTONE, (float) TravelersTitlesCommon.CONFIG.sound.waystoneVolume, (float) TravelersTitlesCommon.CONFIG.sound.waystonePitch);
+                    player.playSound(SoundModule.WAYSTONE.get(), (float) TravelersTitlesCommon.CONFIG.sound.waystoneVolume, (float) TravelersTitlesCommon.CONFIG.sound.waystonePitch);
                 }
             }
         }

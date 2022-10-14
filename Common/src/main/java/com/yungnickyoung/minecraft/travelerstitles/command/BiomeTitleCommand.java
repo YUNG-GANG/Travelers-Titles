@@ -6,6 +6,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
 import net.minecraft.ResourceLocationException;
 import net.minecraft.Util;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
@@ -22,11 +23,11 @@ public class BiomeTitleCommand {
     public static final DynamicCommandExceptionType INVALID_BIOME_EXCEPTION = new DynamicCommandExceptionType(
             (formatArgs) -> Component.translatable("travelerstitles.commands.biometitle.invalid", formatArgs));
 
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection environment) {
         dispatcher.register(Commands.literal("biometitle")
                 .requires((source) -> source.hasPermission(2))
                 .then(Commands.argument("biome", ResourceOrTagLocationArgument.resourceOrTag(Registry.BIOME_REGISTRY))
-                .executes((context) -> displayTitle(context.getSource(), ResourceOrTagLocationArgument.getRegistryType(context, "biome", Registry.BIOME_REGISTRY, INVALID_BIOME_EXCEPTION)))));
+                        .executes((ctx) -> displayTitle(ctx.getSource(), ResourceOrTagLocationArgument.getRegistryType(ctx, "biome", Registry.BIOME_REGISTRY, INVALID_BIOME_EXCEPTION)))));
     }
 
     public static int displayTitle(CommandSourceStack commandSource, ResourceOrTagLocationArgument.Result<Biome> biomeResult) throws CommandSyntaxException {

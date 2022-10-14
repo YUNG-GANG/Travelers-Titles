@@ -1,15 +1,17 @@
 package com.yungnickyoung.minecraft.travelerstitles.module;
 
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
+import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
+import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterSoundEvent;
 
+@AutoRegister(TravelersTitlesCommon.MOD_ID)
 public class SoundModule {
-    public static SoundEvent BIOME = createSoundEvent("biome");
-    public static SoundEvent DIMENSION = createSoundEvent("dimension");
-    public static SoundEvent WAYSTONE = createSoundEvent("waystone");
+    @AutoRegister("biome")
+    public static AutoRegisterSoundEvent BIOME = AutoRegisterSoundEvent.create();
 
-    private static SoundEvent createSoundEvent(final String soundName) {
-        return new SoundEvent(new ResourceLocation(TravelersTitlesCommon.MOD_ID, soundName));
-    }
+    @AutoRegister("dimension")
+    public static AutoRegisterSoundEvent DIMENSION = AutoRegisterSoundEvent.create();
+
+    @AutoRegister("waystone")
+    public static AutoRegisterSoundEvent WAYSTONE = AutoRegisterSoundEvent.create();
 }

@@ -148,7 +148,7 @@ public class TitleRenderManager {
                 dimensionTitleRenderer.addRecentEntry(currDimension);
 
                 // Play dimension entry sound
-                player.playSound(SoundModule.DIMENSION, (float) TravelersTitlesCommon.CONFIG.sound.dimensionVolume, (float) TravelersTitlesCommon.CONFIG.sound.dimensionPitch);
+                player.playSound(SoundModule.DIMENSION.get(), (float) TravelersTitlesCommon.CONFIG.sound.dimensionVolume, (float) TravelersTitlesCommon.CONFIG.sound.dimensionPitch);
             }
         }
     }
@@ -214,7 +214,7 @@ public class TitleRenderManager {
                 // This ensures the biome sound doesn't overlap with the dimension and waystone sounds.
                 if (dimensionTitleRenderer.titleTimer <= 0) {
                     if (!CompatModule.isWaystonesLoaded || !Services.WAYSTONES.isRendering()) {
-                        player.playSound(SoundModule.BIOME, (float) TravelersTitlesCommon.CONFIG.sound.biomeVolume, (float) TravelersTitlesCommon.CONFIG.sound.biomePitch);
+                        player.playSound(SoundModule.BIOME.get(), (float) TravelersTitlesCommon.CONFIG.sound.biomeVolume, (float) TravelersTitlesCommon.CONFIG.sound.biomePitch);
                     }
                 }
             }
