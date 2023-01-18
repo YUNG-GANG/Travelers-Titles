@@ -1,6 +1,6 @@
 {
   "travelerstitles.commands.biometitle.invalid": "\"%s\" は有効なバイオームではないようです",
-  "travelerstitles.commands.biometitle.notfound": "\"%s\ のバイオームのタイトルが見つかりません"",
+  "travelerstitles.commands.biometitle.notfound": "\"%s\" のバイオームのタイトルが見つかりません",
 
   "travelerstitles.minecraft.overworld": "オーバーワールド",
   "travelerstitles.minecraft.the_nether": "ネザー",
