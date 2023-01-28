@@ -30,6 +30,10 @@
   "travelerstitles.lobby.lobby_dimension": "ロビー",
   "travelerstitles.lobby.mining_dimension": "マイニングディメンション",
   "travelerstitles.lobby.void_dimension": "ヴォイドディメンション",
+  "travelerstitles.edenring.edenring": "エデンリング",
+  "travelerstitles.edenring.edenring.color":"40e0d0",
+  "travelerstitles.edenring.eden_ring": "エデンリング",
+  "travelerstitles.edenring.eden_ring.color":"40e0d0",
 
   "biome.terralith.alpha_islands": "アルファアイランド",
   "biome.terralith.alpha_islands_winter": "アルファアイランド (冬)",
