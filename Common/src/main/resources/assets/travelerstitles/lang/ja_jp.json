@@ -242,11 +242,11 @@
   "text.autoconfig.travelerstitles-fabric-1_19.option.dimensions.onlyUpdateAtSurface.@Tooltip[2]": "これにより、プレイヤーが地下にいる間ディメンションのタイトルが表示されなくなります",
 
   "text.autoconfig.travelerstitles-fabric-1_19.option.sound.biomeVolume": "バイオームの音響効果の音量",
-  "text.autoconfig.travelerstitles-fabric-1_19.option.sound.biomeVolume.@Tooltip": "バイオームのタイトル表示時に再生される音響効果の大きさです",
+  "text.autoconfig.travelerstitles-fabric-1_19.option.sound.biomeVolume.@Tooltip": "バイオームのタイトル表示時に再生される音の大きさです",
   "text.autoconfig.travelerstitles-fabric-1_19.option.sound.biomePitch": "バイオームの音響効果の音調",
   "text.autoconfig.travelerstitles-fabric-1_19.option.sound.biomePitch.@Tooltip": "バイオームのタイトル表示時に再生される音の高さです",
   "text.autoconfig.travelerstitles-fabric-1_19.option.sound.dimensionVolume": "ディメンションの音響効果の音量",
-  "text.autoconfig.travelerstitles-fabric-1_19.option.sound.dimensionVolume.@Tooltip": "ディメンションのタイトル表示時に再生される音響効果の大きさです",
+  "text.autoconfig.travelerstitles-fabric-1_19.option.sound.dimensionVolume.@Tooltip": "ディメンションのタイトル表示時に再生される音の大きさです",
   "text.autoconfig.travelerstitles-fabric-1_19.option.sound.dimensionPitch": "ディメンションの音響効果の音調",
   "text.autoconfig.travelerstitles-fabric-1_19.option.sound.dimensionPitch.@Tooltip": "ディメンションのタイトル表示時に再生される音の高さです"
 }
