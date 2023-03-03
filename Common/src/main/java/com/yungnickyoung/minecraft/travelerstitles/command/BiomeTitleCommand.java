@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.travelerstitles.command;//package com.yungnickyoung.minecraft.travelerstitles.command;
+package com.yungnickyoung.minecraft.travelerstitles.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -9,8 +9,8 @@ import net.minecraft.Util;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
-import net.minecraft.core.Registry;
+import net.minecraft.commands.arguments.ResourceOrTagKeyArgument;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -26,11 +26,11 @@ public class BiomeTitleCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection environment) {
         dispatcher.register(Commands.literal("biometitle")
                 .requires((source) -> source.hasPermission(2))
-                .then(Commands.argument("biome", ResourceOrTagLocationArgument.resourceOrTag(Registry.BIOME_REGISTRY))
-                        .executes((ctx) -> displayTitle(ctx.getSource(), ResourceOrTagLocationArgument.getRegistryType(ctx, "biome", Registry.BIOME_REGISTRY, INVALID_BIOME_EXCEPTION)))));
+                .then(Commands.argument("biome", ResourceOrTagKeyArgument.resourceOrTagKey(Registries.BIOME))
+                        .executes((ctx) -> displayTitle(ctx.getSource(), ResourceOrTagKeyArgument.getResourceOrTagKey(ctx, "biome", Registries.BIOME, INVALID_BIOME_EXCEPTION)))));
     }
 
-    public static int displayTitle(CommandSourceStack commandSource, ResourceOrTagLocationArgument.Result<Biome> biomeResult) throws CommandSyntaxException {
+    public static int displayTitle(CommandSourceStack commandSource, ResourceOrTagKeyArgument.Result<Biome> biomeResult) throws CommandSyntaxException {
         ResourceLocation biomeBaseKey;
         try {
             biomeBaseKey = new ResourceLocation(biomeResult.asPrintable());

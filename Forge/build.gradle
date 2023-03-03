@@ -1,15 +1,17 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
-apply plugin: 'net.minecraftforge.gradle'
+
+plugins {
+    id 'eclipse'
+    id 'net.minecraftforge.gradle' version '5.1.+'
+}
+
 apply plugin: 'org.spongepowered.mixin'
 
 archivesBaseName = "${mod_name}"
@@ -89,7 +91,6 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     implementation fg.deobf("com.yungnickyoung.minecraft.yungsapi:YungsApi:${minecraft_version}-Forge-${yungsapi_version}")
-//    implementation fg.deobf("com.yungnickyoung.minecraft.yungsapi:YungsApi:${minecraft_version}-Forge-3.7.3-beta0")
     implementation fg.deobf("curse.maven:waystones-245755:${waystones_fileid_forge}")
     implementation fg.deobf("curse.maven:balm-531761:${balm_fileid_forge}")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'

@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 
 public class TravelersTitlesCommon {
     public static final String MOD_ID = "travelerstitles";
-    public static final String MOD_NAME = "Traveler's Titles";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final ConfigModule CONFIG = new ConfigModule();
 
