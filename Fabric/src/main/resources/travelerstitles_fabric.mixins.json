@@ -10,6 +10,6 @@
     "defaultRequire": 1
   },
   "client": [
-    "RenderGuiTickMixin"
+    "RenderGuiTickMixinFabric"
   ]
 }

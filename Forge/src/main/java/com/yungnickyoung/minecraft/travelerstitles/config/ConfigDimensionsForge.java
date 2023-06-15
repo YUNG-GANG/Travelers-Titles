@@ -10,8 +10,8 @@ public class ConfigDimensionsForge {
     public final ForgeConfigSpec.ConfigValue<String> textColor;
     public final ForgeConfigSpec.ConfigValue<Double> textSize;
     public final ForgeConfigSpec.ConfigValue<Boolean> renderShadow;
-    public final ForgeConfigSpec.ConfigValue<Double> textYOffset;
-    public final ForgeConfigSpec.ConfigValue<Double> textXOffset;
+    public final ForgeConfigSpec.ConfigValue<Integer> textYOffset;
+    public final ForgeConfigSpec.ConfigValue<Integer> textXOffset;
     public final ForgeConfigSpec.ConfigValue<String> dimensionBlacklist;
     public final ForgeConfigSpec.ConfigValue<Boolean> centerText;
     public final ForgeConfigSpec.ConfigValue<Boolean> onlyUpdateAtSurface;
@@ -72,7 +72,7 @@ public class ConfigDimensionsForge {
                 " If Horizontally Center Title is enabled, this number is relative to the center of the screen.\n" +
                 " If Horizontally Center Title is disabled, this number is relative to the top of the screen.\n" +
                 " Default: -32.0")
-            .define("Text Y Offset", -32.0);
+            .define("Text Y Offset", -32);
 
         textXOffset = BUILDER
             .comment(
@@ -80,7 +80,7 @@ public class ConfigDimensionsForge {
                 " If Horizontally Center Title is enabled, this number is relative to the center of the screen.\n" +
                 " If Horizontally Center Title is disabled, this number is relative to the left side of the screen.\n" +
                 " Default: 0.0")
-            .define("Text X Offset", 0.0);
+            .define("Text X Offset", 0);
 
         dimensionBlacklist = BUILDER
             .comment(

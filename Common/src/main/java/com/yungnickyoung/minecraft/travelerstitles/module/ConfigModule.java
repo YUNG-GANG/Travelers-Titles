@@ -22,8 +22,8 @@ public class ConfigModule {
         public String textColor = "ffffff";
         public double textSize = 2.1;
         public boolean renderShadow = true;
-        public double textYOffset = -33.0;
-        public double textXOffset = 0.0;
+        public int textYOffset = -33;
+        public int textXOffset = 0;
         public List<String> biomeBlacklist = Lists.newArrayList("minecraft:the_end", "minecraft:river", "minecraft:frozen_river");
         public int recentBiomeCacheSize = 5;
         public boolean centerText = true;
@@ -39,8 +39,8 @@ public class ConfigModule {
         public String textColor = "ffffff";
         public double textSize = 3.0;
         public boolean renderShadow = true;
-        public double textYOffset = -32.0;
-        public double textXOffset = 0.0;
+        public int textYOffset = -32;
+        public int textXOffset = 0;
         public List<String> dimensionBlacklist = new ArrayList<>();
         public boolean centerText = true;
         public boolean onlyUpdateAtSurface = false;
@@ -64,8 +64,8 @@ public class ConfigModule {
         public String textColor = "c2b740";
         public double textSize = 2.1;
         public boolean renderShadow = true;
-        public double textYOffset = -33.0;
-        public double textXOffset = 0.0;
+        public int textYOffset = -33;
+        public int textXOffset = 0;
         public int recentWaystoneCacheSize = 3;
         public boolean centerText = true;
         public boolean resetWaystoneCacheOnDimensionChange = true;
@@ -87,8 +87,8 @@ public class ConfigModule {
         TravelersTitlesCommon.titleManager.biomeTitleRenderer.titleDefaultTextColor = TravelersTitlesCommon.CONFIG.biomes.textColor;
         TravelersTitlesCommon.titleManager.biomeTitleRenderer.showTextShadow = TravelersTitlesCommon.CONFIG.biomes.renderShadow;
         TravelersTitlesCommon.titleManager.biomeTitleRenderer.titleTextSize = (float) TravelersTitlesCommon.CONFIG.biomes.textSize;
-        TravelersTitlesCommon.titleManager.biomeTitleRenderer.titleXOffset = (float) TravelersTitlesCommon.CONFIG.biomes.textXOffset;
-        TravelersTitlesCommon.titleManager.biomeTitleRenderer.titleYOffset = (float) TravelersTitlesCommon.CONFIG.biomes.textYOffset;
+        TravelersTitlesCommon.titleManager.biomeTitleRenderer.titleXOffset = TravelersTitlesCommon.CONFIG.biomes.textXOffset;
+        TravelersTitlesCommon.titleManager.biomeTitleRenderer.titleYOffset = TravelersTitlesCommon.CONFIG.biomes.textYOffset;
         TravelersTitlesCommon.titleManager.biomeTitleRenderer.isTextCentered = TravelersTitlesCommon.CONFIG.biomes.centerText;
 
         // Dimension
@@ -99,8 +99,8 @@ public class ConfigModule {
         TravelersTitlesCommon.titleManager.dimensionTitleRenderer.titleDefaultTextColor = TravelersTitlesCommon.CONFIG.dimensions.textColor;
         TravelersTitlesCommon.titleManager.dimensionTitleRenderer.showTextShadow = TravelersTitlesCommon.CONFIG.dimensions.renderShadow;
         TravelersTitlesCommon.titleManager.dimensionTitleRenderer.titleTextSize = (float) TravelersTitlesCommon.CONFIG.dimensions.textSize;
-        TravelersTitlesCommon.titleManager.dimensionTitleRenderer.titleXOffset = (float) TravelersTitlesCommon.CONFIG.dimensions.textXOffset;
-        TravelersTitlesCommon.titleManager.dimensionTitleRenderer.titleYOffset = (float) TravelersTitlesCommon.CONFIG.dimensions.textYOffset;
+        TravelersTitlesCommon.titleManager.dimensionTitleRenderer.titleXOffset = TravelersTitlesCommon.CONFIG.dimensions.textXOffset;
+        TravelersTitlesCommon.titleManager.dimensionTitleRenderer.titleYOffset = TravelersTitlesCommon.CONFIG.dimensions.textYOffset;
         TravelersTitlesCommon.titleManager.dimensionTitleRenderer.isTextCentered = TravelersTitlesCommon.CONFIG.dimensions.centerText;
 
         // Waystones

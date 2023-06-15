@@ -16,7 +16,8 @@ import net.minecraft.server.level.ServerLevel;
 public class DimensionTitleCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection environment) {
         dispatcher.register(Commands
-            .literal("dimensiontitle").requires((source) -> source.hasPermission(2))
+            .literal("dimensiontitle")
+                .requires((source) -> source.hasPermission(2))
             .then(Commands.argument("dimension", DimensionArgument.dimension())
                 .executes((ctx) -> displayTitle(ctx.getSource(), DimensionArgument.getDimension(ctx, "dimension")))));
     }
@@ -27,7 +28,7 @@ public class DimensionTitleCommand {
         String dimensionNameKey = Util.makeDescriptionId(TravelersTitlesCommon.MOD_ID, dimensionBaseKey);
 
         if (TravelersTitlesCommon.CONFIG.dimensions.dimensionBlacklist.contains(dimensionBaseKey.toString())) {
-            commandSource.sendSuccess(Component.literal("That dimension is blacklisted, so its title won't normally show!"), false);
+            commandSource.sendSuccess(() -> Component.literal("That dimension is blacklisted, so its title won't normally show!"), false);
         }
 
         Component dimensionTitle;

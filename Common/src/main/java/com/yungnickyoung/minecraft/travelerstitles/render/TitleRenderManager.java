@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.travelerstitles.render;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
 import com.yungnickyoung.minecraft.travelerstitles.module.CompatModule;
 import com.yungnickyoung.minecraft.travelerstitles.module.SoundModule;
@@ -8,6 +7,7 @@ import com.yungnickyoung.minecraft.travelerstitles.module.TagModule;
 import com.yungnickyoung.minecraft.travelerstitles.services.Services;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -65,11 +65,11 @@ public class TitleRenderManager {
     /**
      * Renders all titles that are marked as ready to render.
      */
-    public void renderTitles(PoseStack poseStack, float partialTicks) {
+    public void renderTitles(GuiGraphics guiGraphics, float partialTicks) {
         if (!Minecraft.getInstance().options.renderDebug) {
-            dimensionTitleRenderer.renderText(partialTicks, poseStack);
-            biomeTitleRenderer.renderText(partialTicks, poseStack);
-            Services.WAYSTONES.renderText(partialTicks, poseStack);
+            dimensionTitleRenderer.renderText(partialTicks, guiGraphics);
+            biomeTitleRenderer.renderText(partialTicks, guiGraphics);
+            Services.WAYSTONES.renderText(partialTicks, guiGraphics);
         }
     }
 
@@ -77,9 +77,9 @@ public class TitleRenderManager {
      * Marks titles for rendering if conditions are met (e.g. player changed biome or dimension)
      */
     public void playerTick(Player player) {
-        if (player instanceof LocalPlayer && player.level.isLoaded(player.blockPosition())) {
+        if (player instanceof LocalPlayer && player.level().isLoaded(player.blockPosition())) {
             BlockPos playerPos = player.blockPosition();
-            Level world = player.level;
+            Level world = player.level();
 
             boolean isPlayerUnderground = world.dimensionType().hasSkyLight() && !world.canSeeSky(playerPos);
 

@@ -42,7 +42,7 @@ public class BiomeTitleCommand {
         String normalBiomeNameKey = Util.makeDescriptionId("biome", biomeBaseKey);
 
         if (TravelersTitlesCommon.CONFIG.biomes.biomeBlacklist.contains(biomeBaseKey.toString())) {
-            commandSource.sendSuccess(Component.literal("That biome is blacklisted, so its title won't normally show!"), false);
+            commandSource.sendSuccess(() -> Component.literal("That biome is blacklisted, so its title won't normally show!"), false);
         }
 
         Component biomeTitle;

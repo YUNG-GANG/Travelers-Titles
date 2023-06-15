@@ -26,7 +26,7 @@ public class ReloadConfigCommand {
         if (CompatModule.isWaystonesLoaded) {
             Services.WAYSTONES.reset();
         }
-        commandSource.sendSuccess(Component.literal("Loading changes from Traveler's Titles config..."), false);
+        commandSource.sendSuccess(() -> Component.literal("Loading changes from Traveler's Titles config..."), false);
         return 1;
     }
 }

@@ -1,11 +1,10 @@
 package com.yungnickyoung.minecraft.travelerstitles.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
@@ -31,8 +30,8 @@ public class TitleRenderer<T> {
     public String titleDefaultTextColor;
     public boolean showTextShadow;
     public float titleTextSize;
-    public float titleXOffset;
-    public float titleYOffset;
+    public int titleXOffset;
+    public int titleYOffset;
     public boolean isTextCentered;
 
     public TitleRenderer(
@@ -44,8 +43,8 @@ public class TitleRenderer<T> {
         String textColor,
         boolean showTextShadow,
         double textSize,
-        double xOffset,
-        double yOffset,
+        int xOffset,
+        int yOffset,
         boolean centerText
     ) {
         this.maxRecentListSize = maxRecentListSize;
@@ -57,12 +56,12 @@ public class TitleRenderer<T> {
         this.titleDefaultTextColor = textColor;
         this.showTextShadow = showTextShadow;
         this.titleTextSize = (float)textSize;
-        this.titleXOffset = (float)xOffset;
-        this.titleYOffset = (float)yOffset;
+        this.titleXOffset = xOffset;
+        this.titleYOffset = yOffset;
         this.isTextCentered = centerText;
     }
 
-    public void renderText(float partialTicks, PoseStack poseStack) {
+    public void renderText(float partialTicks, GuiGraphics guiGraphics) {
         if (displayedTitle != null && titleTimer > 0) {
             float age = (float) titleTimer - partialTicks;
             int opacity = 255;
@@ -78,48 +77,44 @@ public class TitleRenderer<T> {
             opacity = Mth.clamp(opacity, 0, 255);
             if (opacity > 8) {
                 // Set up render system
-                poseStack.pushPose();
-                if (this.isTextCentered)
-                    poseStack.translate(Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2D, (Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2D), 0);
+                guiGraphics.pose().pushPose();
+                if (this.isTextCentered) {
+                    guiGraphics.pose().translate(Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2D, (Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2D), 0);
+                }
                 RenderSystem.enableBlend();
                 RenderSystem.defaultBlendFunc();
 
                 // Render title
-                poseStack.pushPose();
-                poseStack.scale(titleTextSize, titleTextSize, titleTextSize);
+                guiGraphics.pose().pushPose();
+                guiGraphics.pose().scale(titleTextSize, titleTextSize, titleTextSize);
                 int alpha = opacity << 24 & 0xFF000000;
                 Font fontRenderer = Minecraft.getInstance().font;
                 int titleWidth = fontRenderer.width(displayedTitle);
 
                 // Currently does nothing?
-                drawTextBackground(poseStack, -10, titleWidth, titleTextcolor | alpha);
+                drawBackdrop(guiGraphics, -10, titleWidth, titleTextcolor | alpha);
 
                 // Determine x offset
-                float xOffset = this.isTextCentered
-                    ? this.titleXOffset + (float) (-titleWidth / 2)
+                int xOffset = this.isTextCentered
+                    ? this.titleXOffset + (-titleWidth / 2)
                     : this.titleXOffset;
 
-                if (showTextShadow)
-                    fontRenderer.drawShadow(poseStack, displayedTitle, xOffset, titleYOffset, titleTextcolor | alpha);
-                else
-                    fontRenderer.draw(poseStack, displayedTitle, xOffset, titleYOffset, titleTextcolor | alpha);
-                poseStack.popPose();
+                // Render title
+                guiGraphics.drawString(fontRenderer, displayedTitle, xOffset, titleYOffset, titleTextcolor | alpha, showTextShadow);
+                guiGraphics.pose().popPose();
 
                 // Subtitle render. Currently unused
                 if (displayedSubTitle != null) {
-                    poseStack.pushPose();
-                    poseStack.scale(1.3F, 1.3F, 1.3F);
+                    guiGraphics.pose().pushPose();
+                    guiGraphics.pose().scale(1.3F, 1.3F, 1.3F);
                     int subtitleWidth = fontRenderer.width(displayedSubTitle);
-                    drawTextBackground(poseStack, 5, subtitleWidth, 0xFFFFFF | alpha);
-                    if (showTextShadow)
-                        fontRenderer.drawShadow(poseStack, displayedSubTitle, (float) (-subtitleWidth / 2), -35, 0xFFFFFF | alpha);
-                    else
-                        fontRenderer.draw(poseStack, displayedSubTitle, (float) (-subtitleWidth / 2), -35, 0xFFFFFF | alpha);
-                    poseStack.popPose();
+                    drawBackdrop(guiGraphics, 5, subtitleWidth, 0xFFFFFF | alpha);
+                    guiGraphics.drawString(fontRenderer, displayedSubTitle, -subtitleWidth / 2, -35, 0xFFFFFF | alpha, showTextShadow);
+                    guiGraphics.pose().popPose();
                 }
 
                 RenderSystem.disableBlend();
-                poseStack.popPose();
+                guiGraphics.pose().popPose();
             }
         }
     }
@@ -170,11 +165,11 @@ public class TitleRenderer<T> {
         return this.recentEntries.stream().anyMatch(entryMatchPredicate);
     }
 
-    protected void drawTextBackground(PoseStack mStack, int yOffset, int width, int color) {
+    protected void drawBackdrop(GuiGraphics guiGraphics, int yOffset, int width, int color) {
         int textBackgroundColor = Minecraft.getInstance().options.getBackgroundColor(0.0F);
         if (textBackgroundColor != 0) {
             int xOffset = -width / 2;
-            GuiComponent.fill(mStack, xOffset - 2, yOffset - 2, xOffset + width + 2, yOffset + 9 + 2, FastColor.ARGB32.multiply(textBackgroundColor, color));
+            guiGraphics.fill(xOffset - 2, yOffset - 2, xOffset + width + 2, yOffset + 9 + 2, FastColor.ARGB32.multiply(textBackgroundColor, color));
         }
     }
 }

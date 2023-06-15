@@ -1,12 +1,12 @@
 package com.yungnickyoung.minecraft.travelerstitles.services;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
 import com.yungnickyoung.minecraft.travelerstitles.module.ConfigModule;
 import com.yungnickyoung.minecraft.travelerstitles.module.SoundModule;
 import com.yungnickyoung.minecraft.travelerstitles.render.TitleRenderer;
 import net.blay09.mods.waystones.api.IWaystone;
 import net.blay09.mods.waystones.api.KnownWaystonesEvent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -52,7 +52,7 @@ public class ForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
         waystoneUpdateTimer++;
 
         if (waystoneUpdateTimer % 10 == 0) {
-            String playerDimension = player.level.dimension().location().toString();
+            String playerDimension = player.level().dimension().location().toString();
             BlockPos playerPos = player.blockPosition();
             double minSqDist = Double.MAX_VALUE;
 
@@ -87,27 +87,28 @@ public class ForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
         IWaystone _closestWaystone = closestWaystone;
 
         // Invalid or missing closest waystone
-        if (_closestWaystone == null || !_closestWaystone.hasName()) return waystoneTitleRenderer.titleTimer > 0;
+        if (_closestWaystone == null || !_closestWaystone.hasName()) {
+            return waystoneTitleRenderer.titleTimer > 0;
+        }
 
-        if (
-                waystoneTitleRenderer.enabled &&
-                        waystoneTitleRenderer.cooldownTimer <= 0 &&
-                        !waystoneTitleRenderer.matchesAnyRecentEntry(w -> w.getName().equals(_closestWaystone.getName()))
-        ) {
-            if (
-                    waystoneTitleRenderer.displayedTitle == null ||
-                            !_closestWaystone.getName().equals(waystoneTitleRenderer.displayedTitle.getString())
-            ) { // We only need to update if title has changed
-                waystoneTitleRenderer.setColor(waystoneTitleRenderer.titleDefaultTextColor);
-                waystoneTitleRenderer.displayTitle(Component.literal(_closestWaystone.getName()), null);
-                waystoneTitleRenderer.cooldownTimer = TravelersTitlesCommon.CONFIG.waystones.textCooldownTime;
-                waystoneTitleRenderer.addRecentEntry(_closestWaystone);
+        boolean shouldUpdateTitle = waystoneTitleRenderer.enabled
+                && waystoneTitleRenderer.cooldownTimer <= 0
+                && !waystoneTitleRenderer.matchesAnyRecentEntry(w -> w.getName().equals(_closestWaystone.getName()));
 
-                // Play waystone entry sound if we haven't just changed dimensions.
-                // This ensures the waystone sound won't overlap with the dimension sound.
-                if (TravelersTitlesCommon.titleManager.dimensionTitleRenderer.titleTimer <= 0) {
-                    player.playSound(SoundModule.WAYSTONE.get(), (float) TravelersTitlesCommon.CONFIG.sound.waystoneVolume, (float) TravelersTitlesCommon.CONFIG.sound.waystonePitch);
-                }
+        boolean hasTitleChanged = waystoneTitleRenderer.displayedTitle == null
+                || !_closestWaystone.getName().equals(waystoneTitleRenderer.displayedTitle.getString());
+
+        // We only need to update if title has changed
+        if (shouldUpdateTitle && hasTitleChanged) {
+            waystoneTitleRenderer.setColor(waystoneTitleRenderer.titleDefaultTextColor);
+            waystoneTitleRenderer.displayTitle(Component.literal(_closestWaystone.getName()), null);
+            waystoneTitleRenderer.cooldownTimer = TravelersTitlesCommon.CONFIG.waystones.textCooldownTime;
+            waystoneTitleRenderer.addRecentEntry(_closestWaystone);
+
+            // Play waystone entry sound if we haven't just changed dimensions.
+            // This ensures the waystone sound won't overlap with the dimension sound.
+            if (TravelersTitlesCommon.titleManager.dimensionTitleRenderer.titleTimer <= 0) {
+                player.playSound(SoundModule.WAYSTONE.get(), (float) TravelersTitlesCommon.CONFIG.sound.waystoneVolume, (float) TravelersTitlesCommon.CONFIG.sound.waystonePitch);
             }
         }
         return waystoneTitleRenderer.titleTimer > 0;
@@ -119,8 +120,8 @@ public class ForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
     }
 
     @Override
-    public void renderText(float partialTicks, PoseStack matrixStack) {
-        waystoneTitleRenderer.renderText(partialTicks, matrixStack);
+    public void renderText(float partialTicks, GuiGraphics guiGraphics) {
+        waystoneTitleRenderer.renderText(partialTicks, guiGraphics);
     }
 
     @Override
@@ -145,8 +146,8 @@ public class ForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
         waystoneTitleRenderer.titleDefaultTextColor = config.textColor;
         waystoneTitleRenderer.showTextShadow = config.renderShadow;
         waystoneTitleRenderer.titleTextSize = (float) config.textSize;
-        waystoneTitleRenderer.titleXOffset = (float) config.textXOffset;
-        waystoneTitleRenderer.titleYOffset = (float) config.textYOffset;
+        waystoneTitleRenderer.titleXOffset = config.textXOffset;
+        waystoneTitleRenderer.titleYOffset = config.textYOffset;
         waystoneTitleRenderer.isTextCentered = config.centerText;
     }
 }

@@ -27,10 +27,10 @@ public class ConfigBiomesFabric {
     public boolean renderShadow = true;
 
     @ConfigEntry.Gui.Tooltip(count = 3)
-    public float textYOffset = -33.0f;
+    public int textYOffset = -33;
 
     @ConfigEntry.Gui.Tooltip(count = 3)
-    public float textXOffset = 0f;
+    public int textXOffset = 0;
 
     @ConfigEntry.Gui.Tooltip(count = 2)
     public String biomeBlacklist = "[minecraft:the_end, minecraft:river, minecraft:frozen_river]";
