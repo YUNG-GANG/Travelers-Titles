@@ -21,9 +21,9 @@ dependencies {
 
     // YUNG's API
     if (useLocalYungsApi) {
-        modImplementation files("libs/YungsApi-${mc_version}-Fabric-${yungsapi_version}.jar")
+        modImplementation files("libs/YungsApi-1.19.4-Fabric-${yungsapi_version}.jar")
     } else {
-        modImplementation "com.yungnickyoung.minecraft.yungsapi:YungsApi:${mc_version}-Fabric-${yungsapi_version}"
+        modImplementation "com.yungnickyoung.minecraft.yungsapi:YungsApi:1.19.4-Fabric-${yungsapi_version}"
     }
     implementation("org.reflections:reflections:0.10.2")
     include("org.reflections:reflections:0.10.2")

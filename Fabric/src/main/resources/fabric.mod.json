@@ -34,6 +34,6 @@
     "minecraft": ">=${mc_version}",
     "cloth-config2": ">=${clothconfig_version_fabric}",
     "java": ">=17",
-    "yungsapi": ">=${mc_version}-Fabric-${yungsapi_version}"
+    "yungsapi": ">=1.19.4-Fabric-${yungsapi_version}"
   }
 }

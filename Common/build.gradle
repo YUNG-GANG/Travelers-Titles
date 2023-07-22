@@ -27,8 +27,8 @@ dependencies {
     compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
     if (useLocalYungsApi) {
-        compileOnly files("libs/YungsApi-${mc_version}-Common-${yungsapi_version}.jar")
+        compileOnly files("libs/YungsApi-1.19.4-Common-${yungsapi_version}.jar")
     } else {
-        compileOnly("com.yungnickyoung.minecraft.yungsapi:YungsApi:${mc_version}-Common-${yungsapi_version}")
+        compileOnly("com.yungnickyoung.minecraft.yungsapi:YungsApi:1.19.4-Common-${yungsapi_version}")
     }
 }
