@@ -66,7 +66,7 @@ public class TitleRenderManager {
      * Renders all titles that are marked as ready to render.
      */
     public void renderTitles(GuiGraphics guiGraphics, float partialTicks) {
-        if (!Minecraft.getInstance().options.renderDebug) {
+        if (!Minecraft.getInstance().getDebugOverlay().showDebugScreen()) {
             dimensionTitleRenderer.renderText(partialTicks, guiGraphics);
             biomeTitleRenderer.renderText(partialTicks, guiGraphics);
             Services.WAYSTONES.renderText(partialTicks, guiGraphics);

@@ -4,23 +4,27 @@ import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
 import com.yungnickyoung.minecraft.travelerstitles.module.ConfigModule;
 import com.yungnickyoung.minecraft.travelerstitles.module.SoundModule;
 import com.yungnickyoung.minecraft.travelerstitles.render.TitleRenderer;
-import net.blay09.mods.waystones.api.IWaystone;
-import net.blay09.mods.waystones.api.KnownWaystonesEvent;
+import net.blay09.mods.waystones.api.Waystone;
+import net.blay09.mods.waystones.api.WaystoneTypes;
+import net.blay09.mods.waystones.api.event.WaystoneUpdateReceivedEvent;
+import net.blay09.mods.waystones.api.event.WaystonesListReceivedEvent;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
-    private List<IWaystone> knownWaystones = new ArrayList<>();
-    private IWaystone closestWaystone;
+    private List<Waystone> knownWaystones = new ArrayList<>();
+    private Set<Waystone> sharestones = new HashSet<>();
+    private Waystone closestWaystone;
     private int waystoneUpdateTimer = 0;
-    private final TitleRenderer<IWaystone> waystoneTitleRenderer = new TitleRenderer<>(
+    private final TitleRenderer<Waystone> waystoneTitleRenderer = new TitleRenderer<>(
             TravelersTitlesCommon.CONFIG.waystones.recentWaystoneCacheSize,
             TravelersTitlesCommon.CONFIG.waystones.enabled,
             TravelersTitlesCommon.CONFIG.waystones.textFadeInTime,
@@ -36,15 +40,19 @@ public class ForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
 
     @Override
     public void init() {
-        MinecraftForge.EVENT_BUS.addListener(this::updateKnownWaystones);
+        MinecraftForge.EVENT_BUS.addListener(this::onWaystoneListReceived);
         MinecraftForge.EVENT_BUS.addListener(this::updateClosestWaystone);
     }
 
     /**
      * Updates the stored player's list of known waystones.
      */
-    private void updateKnownWaystones(final KnownWaystonesEvent event) {
-        knownWaystones = event.getWaystones();
+    private void onWaystoneListReceived(final WaystonesListReceivedEvent event) {
+        if (event.getWaystoneType().equals(WaystoneTypes.WAYSTONE)) {
+            knownWaystones = event.getWaystones();
+        } else if (WaystoneTypes.isSharestone(event.getWaystoneType())) {
+            sharestones.addAll(event.getWaystones());
+        }
     }
 
     private void updateClosestWaystone(final TickEvent.PlayerTickEvent event) {
@@ -57,7 +65,7 @@ public class ForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
             double minSqDist = Double.MAX_VALUE;
 
             // Iterate waystones, finding closest one
-            for (IWaystone waystone : knownWaystones) {
+            for (Waystone waystone : knownWaystones) {
                 String waystoneDimension = waystone.getDimension().location().toString();
 
                 // Only consider waystones with names
@@ -73,6 +81,23 @@ public class ForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
                 }
             }
 
+            // Iterate sharestones, finding closest one
+            for (Waystone sharestone : sharestones) {
+                String sharestoneDimension = sharestone.getDimension().location().toString();
+
+                // Only consider sharestones with names
+                if (!sharestone.hasName()) continue;
+
+                // Calculate distance for sharestones in same dimension as player.
+                if (playerDimension.equals(sharestoneDimension)) {
+                    double sqDistance = sharestone.getPos().distSqr(playerPos);
+                    if (sqDistance < minSqDist) {
+                        minSqDist = sqDistance;
+                        closestWaystone = sharestone;
+                    }
+                }
+            }
+
             // Only save closest waystone if it is within range
             int range = TravelersTitlesCommon.CONFIG.waystones.range;
             if (minSqDist > range * range) {
@@ -84,7 +109,7 @@ public class ForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
     @Override
     public boolean updateWaystoneTitle(Player player) {
         // Store copy of closest waystone since it could become null at any time (from updateClosestWaystone event)
-        IWaystone _closestWaystone = closestWaystone;
+        Waystone _closestWaystone = closestWaystone;
 
         // Invalid or missing closest waystone
         if (_closestWaystone == null || !_closestWaystone.hasName()) {
@@ -101,7 +126,7 @@ public class ForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
         // We only need to update if title has changed
         if (shouldUpdateTitle && hasTitleChanged) {
             waystoneTitleRenderer.setColor(waystoneTitleRenderer.titleDefaultTextColor);
-            waystoneTitleRenderer.displayTitle(Component.literal(_closestWaystone.getName()), null);
+            waystoneTitleRenderer.displayTitle(_closestWaystone.getName(), null);
             waystoneTitleRenderer.cooldownTimer = TravelersTitlesCommon.CONFIG.waystones.textCooldownTime;
             waystoneTitleRenderer.addRecentEntry(_closestWaystone);
 
