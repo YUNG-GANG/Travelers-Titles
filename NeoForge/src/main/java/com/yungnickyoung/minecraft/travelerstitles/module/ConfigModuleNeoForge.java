@@ -16,7 +16,7 @@ import java.util.List;
 public class ConfigModuleNeoForge {
     public static void init() {
         // Register mod config with NeoForge
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, TTConfigNeoForge.SPEC, "travelerstitles-forge-1_20_4.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, TTConfigNeoForge.SPEC, "travelerstitles-neoforge-1_20_4.toml");
         NeoForge.EVENT_BUS.addListener(ConfigModuleNeoForge::onWorldLoad);
         TravelersTitlesNeoForge.loadingContextEventBus.addListener(ConfigModuleNeoForge::configChanged);
     }

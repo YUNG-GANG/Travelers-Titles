@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 public class RenderGuiNeoForge {
     @SubscribeEvent
     public static void onClientTick(RegisterGuiOverlaysEvent event) {
-        event.registerAboveAll(new ResourceLocation(TravelersTitlesCommon.MOD_ID, "title"), RenderGuiNeoForge::render);
+        event.registerAboveAll(new ResourceLocation(TravelersTitlesCommon.MOD_ID, "overlay"), RenderGuiNeoForge::render);
     }
 
     private static void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
