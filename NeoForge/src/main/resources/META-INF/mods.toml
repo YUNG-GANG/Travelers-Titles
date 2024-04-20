@@ -1,0 +1,34 @@
+modLoader="javafml" #mandatory
+loaderVersion="[2,)"
+license="LGPLv3"
+issueTrackerURL="https://github.com/yungnickyoung/Travelers-Titles"
+
+[[mods]]
+    modId="${mod_id}"
+    version="${version}"
+    displayName="${mod_full_name}"
+    credits="Thanks so much to all my patrons!"
+    authors="YUNGNICKYOUNG"
+    description="${mod_description}"
+    logoFile="icon.png"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/travelers-titles"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="[${mc_version},1.21)"
+
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neoforge_version},)"
+
+[[dependencies.${mod_id}]]
+    modId="yungsapi"
+    versionRange="[${mc_version}-NeoForge-${yungsapi_version},)"
+    type="required"
+    ordering="NONE"
+    side="BOTH"
+
+[[mixins]]
+    config = "travelerstitles.mixins.json"
