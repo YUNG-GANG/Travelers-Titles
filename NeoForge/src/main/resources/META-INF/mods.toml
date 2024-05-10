@@ -11,7 +11,7 @@ issueTrackerURL="https://github.com/yungnickyoung/Travelers-Titles"
     authors="YUNGNICKYOUNG"
     description="${mod_description}"
     logoFile="icon.png"
-    displayURL="https://www.curseforge.com/minecraft/mc-mods/travelers-titles"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/travelers-titles-neoforge"
 
 [[dependencies.${mod_id}]]
     modId="minecraft"
