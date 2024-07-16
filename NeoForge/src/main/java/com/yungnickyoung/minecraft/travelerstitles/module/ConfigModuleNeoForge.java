@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesNeoForge;
 import com.yungnickyoung.minecraft.travelerstitles.config.TTConfigNeoForge;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -14,9 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigModuleNeoForge {
-    public static void init() {
-        // Register mod config with NeoForge
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, TTConfigNeoForge.SPEC, "travelerstitles-neoforge-1_20_4.toml");
+    public static void init(ModContainer container) {
+        container.registerConfig(ModConfig.Type.CLIENT, TTConfigNeoForge.SPEC, "travelerstitles-neoforge-1_21.toml");
         NeoForge.EVENT_BUS.addListener(ConfigModuleNeoForge::onWorldLoad);
         TravelersTitlesNeoForge.loadingContextEventBus.addListener(ConfigModuleNeoForge::configChanged);
     }

@@ -11,7 +11,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -54,8 +54,8 @@ public class NeoForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
         }
     }
 
-    private void updateClosestWaystone(final TickEvent.PlayerTickEvent event) {
-        Player player = event.player;
+    private void updateClosestWaystone(final PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
         waystoneUpdateTimer++;
 
         if (waystoneUpdateTimer % 10 == 0) {

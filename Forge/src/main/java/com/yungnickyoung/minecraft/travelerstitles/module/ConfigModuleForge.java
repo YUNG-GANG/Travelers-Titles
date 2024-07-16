@@ -16,7 +16,7 @@ import java.util.List;
 public class ConfigModuleForge {
     public static void init() {
         // Register mod config with Forge
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, TTConfigForge.SPEC, "travelerstitles-forge-1_20_4.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, TTConfigForge.SPEC, "travelerstitles-forge-1_21.toml");
         MinecraftForge.EVENT_BUS.addListener(ConfigModuleForge::onWorldLoad);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ConfigModuleForge::configChanged);
     }

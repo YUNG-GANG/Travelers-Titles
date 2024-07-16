@@ -8,5 +8,5 @@ import net.minecraft.world.level.biome.Biome;
 
 public class TagModule {
     public static final TagKey<Biome> IS_UNDERGROUND = TagKey.create(Registries.BIOME,
-            new ResourceLocation(TravelersTitlesCommon.MOD_ID, "is_underground"));
+            ResourceLocation.fromNamespaceAndPath(TravelersTitlesCommon.MOD_ID, "is_underground"));
 }

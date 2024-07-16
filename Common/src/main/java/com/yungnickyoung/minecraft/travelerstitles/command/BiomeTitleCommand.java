@@ -33,7 +33,7 @@ public class BiomeTitleCommand {
     public static int displayTitle(CommandSourceStack commandSource, ResourceOrTagKeyArgument.Result<Biome> biomeResult) throws CommandSyntaxException {
         ResourceLocation biomeBaseKey;
         try {
-            biomeBaseKey = new ResourceLocation(biomeResult.asPrintable());
+            biomeBaseKey = ResourceLocation.parse(biomeResult.asPrintable());
         } catch (ResourceLocationException e) {
             throw INVALID_BIOME_EXCEPTION.create(biomeResult.asPrintable());
         }
