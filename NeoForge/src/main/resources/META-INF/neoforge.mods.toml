@@ -31,4 +31,4 @@ issueTrackerURL="https://github.com/yungnickyoung/Travelers-Titles"
     side="BOTH"
 
 [[mixins]]
-    config = "travelerstitles.mixins.json"
+    config = "${mod_id}.mixins.json"
