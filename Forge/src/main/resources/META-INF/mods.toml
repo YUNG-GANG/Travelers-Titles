@@ -16,12 +16,12 @@ issueTrackerURL="https://github.com/yungnickyoung/Travelers-Titles"
 [[dependencies.${mod_id}]]
     modId="minecraft"
     mandatory=true
-    versionRange="[${mc_version},1.22)"
+    versionRange="${mc_version_range}"
 
 [[dependencies.${mod_id}]]
     modId="forge"
     mandatory=true
-    versionRange="[${forge_version},)"
+    versionRange="${forge_loader_version_range}"
 
 [[dependencies.${mod_id}]]
     modId="yungsapi"
