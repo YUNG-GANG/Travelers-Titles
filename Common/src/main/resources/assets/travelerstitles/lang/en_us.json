@@ -85,8 +85,6 @@
   "travelerstitles.lostcities.lostcity": "Lost Cities",
   "travelerstitles.man.halucination.color": "011635",
   "travelerstitles.man.halucination": "Hallucination",
-  "travelerstitles.me.middle_earth.color": "dfb887",
-  "travelerstitles.me.middle_earth": "Middle-Earth",
   "travelerstitles.minecells.insufferable_crypt.color": "db2114",
   "travelerstitles.minecells.insufferable_crypt": "Insufferable Crypt",
   "travelerstitles.minecells.prison.color": "db2114",
@@ -117,7 +115,8 @@
   "travelerstitles.voidscape.void": "Voidscape",
   "travelerstitles.voidz.void.color": "29135b",
   "travelerstitles.voidz.void": "Void",
-
+  "travelerstitles.me.middle_earth": "Middle-earth",
+  "travelerstitles.me.middle_earth.color": "dfb887",
   "biome.terralith.alpha_islands_winter": "Winter Alpha Islands",
   "biome.terralith.alpha_islands": "Alpha Islands",
   "biome.terralith.alpine_grove": "Alpine Grove",
