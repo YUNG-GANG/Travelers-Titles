@@ -6,10 +6,8 @@ public class CompatModule {
     public static boolean isWaystonesLoaded = false;
 
     public static void init() {
-        // We only support the Forge and NeoForge version of Waystones currently
-        String platformName = Services.PLATFORM.getPlatformName();
-        if (Services.PLATFORM.isModLoaded("waystones")
-                && (platformName.equals("Forge") || platformName.equals("NeoForge"))) {
+        // We only support the NeoForge version of Waystones currently
+        if (Services.PLATFORM.isModLoaded("waystones") && Services.PLATFORM.getPlatformName().equals("NeoForge")) {
             Services.WAYSTONES.init();
             isWaystonesLoaded = true;
         }

@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.7-SNAPSHOT' apply false
+    id 'fabric-loom' version '1.10-SNAPSHOT' apply false
     id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7" // required for NeoGradle
     id 'org.spongepowered.mixin' version '0.7-SNAPSHOT' apply false
     id 'net.darkhax.curseforgegradle' version "${curseforgegradle_version}" apply false // curseforge publishing
@@ -20,9 +20,9 @@ subprojects {
     }
 }
 
-task publishCurseForge(dependsOn: [':Forge:publishCurseForgeForge', ':Fabric:publishCurseForgeFabric', ':NeoForge:publishCurseForgeNeoForge']) {
+task publishCurseForge(dependsOn: [':Fabric:publishCurseForgeFabric', ':NeoForge:publishCurseForgeNeoForge']) {
 }
-task publishModrinth(dependsOn: [':Forge:modrinth', ':Fabric:modrinth', ':NeoForge:modrinth']) {
+task publishModrinth(dependsOn: [':Fabric:modrinth', ':NeoForge:modrinth']) {
 }
 task publishCurseAndModrinth(dependsOn: ['publishCurseForge', 'publishModrinth']) {
 }

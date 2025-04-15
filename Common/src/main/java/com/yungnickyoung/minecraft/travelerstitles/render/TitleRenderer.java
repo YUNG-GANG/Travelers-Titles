@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.FastColor;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 
 import javax.annotation.Nullable;
@@ -169,7 +169,7 @@ public class TitleRenderer<T> {
         int textBackgroundColor = Minecraft.getInstance().options.getBackgroundColor(0.0F);
         if (textBackgroundColor != 0) {
             int xOffset = -width / 2;
-            guiGraphics.fill(xOffset - 2, yOffset - 2, xOffset + width + 2, yOffset + 9 + 2, FastColor.ARGB32.multiply(textBackgroundColor, color));
+            guiGraphics.fill(xOffset - 2, yOffset - 2, xOffset + width + 2, yOffset + 9 + 2, ARGB.multiply(textBackgroundColor, color));
         }
     }
 }

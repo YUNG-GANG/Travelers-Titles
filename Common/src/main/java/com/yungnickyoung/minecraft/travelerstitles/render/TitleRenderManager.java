@@ -164,12 +164,12 @@ public class TitleRenderManager {
             return;
         }
 
-        ResourceLocation biomeBaseKey = world.registryAccess().registryOrThrow(Registries.BIOME).getKey(biomeHolder.value());
+        ResourceLocation biomeBaseKey = world.registryAccess().lookupOrThrow(Registries.BIOME).getKey(biomeHolder.value());
 
         if (
             biomeTitleRenderer.enabled &&
             biomeTitleRenderer.cooldownTimer <= 0 &&
-            !biomeTitleRenderer.matchesAnyRecentEntry(b -> world.registryAccess().registryOrThrow(Registries.BIOME).getKey(b) == biomeBaseKey)
+            !biomeTitleRenderer.matchesAnyRecentEntry(b -> world.registryAccess().lookupOrThrow(Registries.BIOME).getKey(b) == biomeBaseKey)
         ) {
             String overrideBiomeNameKey = Util.makeDescriptionId(TravelersTitlesCommon.MOD_ID + ".biome", biomeBaseKey);
             String normalBiomeNameKey = Util.makeDescriptionId("biome", biomeBaseKey);

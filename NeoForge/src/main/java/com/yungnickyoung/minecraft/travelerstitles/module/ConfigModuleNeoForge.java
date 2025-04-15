@@ -5,7 +5,6 @@ import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesNeoForge;
 import com.yungnickyoung.minecraft.travelerstitles.config.TTConfigNeoForge;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.NeoForge;
