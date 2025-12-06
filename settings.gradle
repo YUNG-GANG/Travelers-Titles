@@ -2,57 +2,40 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = 'Fabric'
-                    url = uri("https://maven.fabricmc.net")
-                }
-            }
-            filter {
-                includeGroup("net.fabricmc")
-                includeGroup("fabric-loom")
-            }
+
+        // Fabric Maven for Loom + unpick artifacts
+        maven {
+            name = 'Fabric'
+            url = uri("https://maven.fabricmc.net")
         }
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = 'NeoForge'
-                    url = uri("https://maven.neoforged.net/releases")
-                }
-            }
-            filter {
-                includeGroupAndSubgroups("net.neoforged")
-                includeGroup("codechicken")
-            }
-        }
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = 'Forge'
-                    url = uri("https://maven.minecraftforge.net")
-                }
-            }
-            filter {
-                includeGroupAndSubgroups("net.minecraftforge")
-            }
-        }
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = 'Sponge Snapshots'
-                    url = uri("https://repo.spongepowered.org/repository/maven-public")
-                }
-            }
-            filter {
-                includeGroupAndSubgroups("org.spongepowered")
-            }
-        }
+
+        // Optional additional repositories for NeoForge, Forge, Sponge
+        maven { url = uri("https://maven.neoforged.net/releases") }
+        maven { url = uri("https://maven.minecraftforge.net") }
+        maven { url = uri("https://repo.spongepowered.org/repository/maven-public") }
     }
 }
 
 plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
+dependencyResolutionManagement {
+    // repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+
+    repositories {
+        mavenCentral()
+        maven { url = uri("https://maven.fabricmc.net") }
+        maven { url = uri("https://api.modrinth.com/maven") } // Needed for Fabric API 1.21.10
+        maven { url = uri("https://maven.minecraftforge.net") }
+        maven { url = uri("https://maven.neoforged.net/releases") }
+        maven { url = uri("https://repo.spongepowered.org/repository/maven-public") }
+        maven { url = uri("https://maven.terraformersmc.com/releases") } // Needed for layered mappings
+        maven { url = uri("https://maven.legacyfabric.net") }           // Sometimes needed
+        maven { url = uri("https://maven.blamejared.com") }             // For some dependencies
+        maven { url = uri("https://maven.elytrium.dev/releases") }      // Optional
+        maven { url = uri("https://maven.oss.sonatype.org/content/groups/public") }
+    }
 }
 
 rootProject.name = 'travelerstitles'

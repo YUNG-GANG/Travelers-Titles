@@ -23,12 +23,5 @@ issueTrackerURL="https://github.com/yungnickyoung/Travelers-Titles"
     type="required"
     versionRange="${neoforge_version_range}"
 
-[[dependencies.${mod_id}]]
-    modId="yungsapi"
-    versionRange="[${mc_version}-NeoForge-${yungsapi_version},)"
-    type="required"
-    ordering="NONE"
-    side="BOTH"
-
 [[mixins]]
     config = "${mod_id}.mixins.json"

@@ -56,7 +56,6 @@ configurations {
 
 dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
-    implementation "com.yungnickyoung.minecraft.yungsapi:YungsApi:${mc_version}-NeoForge-${yungsapi_version}"
 
     // Waystones
     implementation "curse.maven:waystones-245755:${waystones_fileid_neoforge}"
@@ -74,7 +73,6 @@ task publishCurseForgeNeoForge(type: net.darkhax.curseforgegradle.TaskPublishCur
     mainFile.changelogType = 'markdown'
     mainFile.changelog = file("../CHANGELOG.md").exists() ? file("../CHANGELOG.md").text : "No changelog provided"
     mainFile.releaseType = 'release'
-    mainFile.addRequirement('yungs-api')
     mainFile.addModLoader('neoforge')
     mainFile.displayName = "[${mc_version}] ${mod_full_name} v${rawVersion} (NeoForge)"
     compatibleVersions.each { version ->
@@ -97,7 +95,6 @@ modrinth {
         // scope.type
         // The scope can be `required`, `optional`, `incompatible`, or `embedded`
         // The type can either be `project` or `version`
-        required.project "yungs-api"
     }
 }
 tasks.modrinth.dependsOn(tasks.jar)

@@ -113,8 +113,7 @@ processResources {
             "license"                      : license,
             "mod_description"              : project.mod_description,
             "mod_credits"                  : mod_credits,
-            "java_version"                 : java_version,
-            "yungsapi_version"             : yungsapi_version
+            "java_version"                 : java_version
     ]
 
     filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/neoforge.mods.toml', '*.mixins.json']) {
