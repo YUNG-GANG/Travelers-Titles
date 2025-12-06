@@ -5,8 +5,6 @@ plugins {
     id 'com.modrinth.minotaur'
 }
 
-def useLocalYungsApi = findProject(':yungsapi') != null
-
 repositories {
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases/" }
@@ -17,13 +15,6 @@ dependencies {
     mappings loom.layered {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
-    }
-
-    // YUNG's API
-    if (useLocalYungsApi) {
-        modImplementation files("libs/YungsApi-${mc_version}-Fabric-${yungsapi_version}.jar")
-    } else {
-        modImplementation "com.yungnickyoung.minecraft.yungsapi:YungsApi:${mc_version}-Fabric-${yungsapi_version}"
     }
     implementation("org.reflections:reflections:0.10.2")
     include("org.reflections:reflections:0.10.2")
@@ -76,7 +67,6 @@ task publishCurseForgeFabric(type: net.darkhax.curseforgegradle.TaskPublishCurse
     mainFile.changelogType = 'markdown'
     mainFile.changelog = file("../CHANGELOG.md").exists() ? file("../CHANGELOG.md").text : "No changelog provided"
     mainFile.releaseType = 'release'
-    mainFile.addRequirement('yungs-api-fabric')
     mainFile.addRequirement('fabric-api')
     mainFile.addRequirement('cloth-config')
     mainFile.addOptional('modmenu')
@@ -101,7 +91,6 @@ modrinth {
         // scope.type
         // The scope can be `required`, `optional`, `incompatible`, or `embedded`
         // The type can either be `project` or `version`
-        required.project "yungs-api"
         required.project "fabric-api"
         required.project "cloth-config"
         optional.project "modmenu"

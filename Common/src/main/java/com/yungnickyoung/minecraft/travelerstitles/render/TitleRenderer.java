@@ -77,16 +77,12 @@ public class TitleRenderer<T> {
             opacity = Mth.clamp(opacity, 0, 255);
             if (opacity > 8) {
                 // Set up render system
-                guiGraphics.pose().pushPose();
                 if (this.isTextCentered) {
-                    guiGraphics.pose().translate(Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2D, (Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2D), 0);
+                    guiGraphics.pose().translate((float)Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2F, (float)Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2F);
                 }
-                RenderSystem.enableBlend();
-                RenderSystem.defaultBlendFunc();
 
                 // Render title
-                guiGraphics.pose().pushPose();
-                guiGraphics.pose().scale(titleTextSize, titleTextSize, titleTextSize);
+                guiGraphics.pose().scale(titleTextSize, titleTextSize);
                 int alpha = opacity << 24 & 0xFF000000;
                 Font fontRenderer = Minecraft.getInstance().font;
                 int titleWidth = fontRenderer.width(displayedTitle);
@@ -101,20 +97,14 @@ public class TitleRenderer<T> {
 
                 // Render title
                 guiGraphics.drawString(fontRenderer, displayedTitle, xOffset, titleYOffset, titleTextcolor | alpha, showTextShadow);
-                guiGraphics.pose().popPose();
 
                 // Subtitle render. Currently unused
                 if (displayedSubTitle != null) {
-                    guiGraphics.pose().pushPose();
-                    guiGraphics.pose().scale(1.3F, 1.3F, 1.3F);
+                    guiGraphics.pose().scale(1.3F / titleTextSize, 1.3F / titleTextSize);
                     int subtitleWidth = fontRenderer.width(displayedSubTitle);
                     drawBackdrop(guiGraphics, 5, subtitleWidth, 0xFFFFFF | alpha);
                     guiGraphics.drawString(fontRenderer, displayedSubTitle, -subtitleWidth / 2, -35, 0xFFFFFF | alpha, showTextShadow);
-                    guiGraphics.pose().popPose();
                 }
-
-                RenderSystem.disableBlend();
-                guiGraphics.pose().popPose();
             }
         }
     }

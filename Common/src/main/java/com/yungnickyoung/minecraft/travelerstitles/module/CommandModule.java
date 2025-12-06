@@ -1,20 +1,17 @@
 package com.yungnickyoung.minecraft.travelerstitles.module;
 
-import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
+import com.mojang.brigadier.CommandDispatcher;
 import com.yungnickyoung.minecraft.travelerstitles.command.BiomeTitleCommand;
 import com.yungnickyoung.minecraft.travelerstitles.command.DimensionTitleCommand;
 import com.yungnickyoung.minecraft.travelerstitles.command.ReloadConfigCommand;
-import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
-import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterCommand;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 
-@AutoRegister(TravelersTitlesCommon.MOD_ID)
 public class CommandModule {
-    @AutoRegister("biome_title")
-    public static AutoRegisterCommand BIOME_TITLE_COMMAND = AutoRegisterCommand.of(BiomeTitleCommand::register);
-
-    @AutoRegister("dimension_title")
-    public static AutoRegisterCommand DIMENSION_TITLE_COMMAND = AutoRegisterCommand.of(DimensionTitleCommand::register);
-
-    @AutoRegister("reload")
-    public static AutoRegisterCommand RELOAD_CONFIG_COMMAND = AutoRegisterCommand.of(ReloadConfigCommand::register);
+    public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection selection) {
+        BiomeTitleCommand.register(dispatcher, context, selection);
+        DimensionTitleCommand.register(dispatcher, context, selection);
+        ReloadConfigCommand.register(dispatcher, context, selection);
+    }
 }

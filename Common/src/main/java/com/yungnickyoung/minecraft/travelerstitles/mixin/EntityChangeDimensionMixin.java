@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public class EntityChangeDimensionMixin {
     @Inject(method = "teleportCrossDimension", at = @At(value = "TAIL"))
-    private void onPlayerChangeDimension(ServerLevel $$0, TeleportTransition $$1, CallbackInfoReturnable<Entity> cir) {
+    private void onPlayerChangeDimension(ServerLevel sourceWorld, ServerLevel targetWorld, TeleportTransition $$2, CallbackInfoReturnable<Entity> cir) {
         TravelersTitlesCommon.titleManager.playerChangedDimension(this);
     }
 }
