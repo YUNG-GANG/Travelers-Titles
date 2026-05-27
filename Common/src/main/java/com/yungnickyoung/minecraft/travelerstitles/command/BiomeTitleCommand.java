@@ -4,8 +4,9 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
-import net.minecraft.ResourceLocationException;
-import net.minecraft.Util;
+import net.minecraft.IdentifierException;
+import net.minecraft.server.permissions.Permissions;
+import net.minecraft.util.Util;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -13,7 +14,7 @@ import net.minecraft.commands.arguments.ResourceOrTagKeyArgument;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 
 public class BiomeTitleCommand {
@@ -25,16 +26,16 @@ public class BiomeTitleCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection environment) {
         dispatcher.register(Commands.literal("biometitle")
-                .requires((source) -> source.hasPermission(2))
+                .requires((source) -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                 .then(Commands.argument("biome", ResourceOrTagKeyArgument.resourceOrTagKey(Registries.BIOME))
                         .executes((ctx) -> displayTitle(ctx.getSource(), ResourceOrTagKeyArgument.getResourceOrTagKey(ctx, "biome", Registries.BIOME, INVALID_BIOME_EXCEPTION)))));
     }
 
     public static int displayTitle(CommandSourceStack commandSource, ResourceOrTagKeyArgument.Result<Biome> biomeResult) throws CommandSyntaxException {
-        ResourceLocation biomeBaseKey;
+        Identifier biomeBaseKey;
         try {
-            biomeBaseKey = ResourceLocation.parse(biomeResult.asPrintable());
-        } catch (ResourceLocationException e) {
+            biomeBaseKey = Identifier.parse(biomeResult.asPrintable());
+        } catch (IdentifierException e) {
             throw INVALID_BIOME_EXCEPTION.create(biomeResult.asPrintable());
         }
 

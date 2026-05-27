@@ -4,7 +4,7 @@ import com.yungnickyoung.minecraft.travelerstitles.module.ConfigModule;
 import com.yungnickyoung.minecraft.travelerstitles.render.TitleRenderManager;
 import com.yungnickyoung.minecraft.travelerstitles.services.Services;
 import com.yungnickyoung.minecraft.yungsapi.api.YungAutoRegister;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +20,7 @@ public class TravelersTitlesCommon {
         Services.MODULES.loadModules();
     }
 
-    public static ResourceLocation id(String location) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, location);
+    public static Identifier id(String location) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, location);
     }
 }

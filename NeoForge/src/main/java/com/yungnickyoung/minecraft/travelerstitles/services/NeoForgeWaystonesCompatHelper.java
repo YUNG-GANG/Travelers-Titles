@@ -7,7 +7,7 @@ import com.yungnickyoung.minecraft.travelerstitles.render.TitleRenderer;
 import net.blay09.mods.waystones.api.Waystone;
 import net.blay09.mods.waystones.api.WaystoneTypes;
 import net.blay09.mods.waystones.api.event.WaystonesListReceivedEvent;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.NeoForge;
@@ -59,13 +59,13 @@ public class NeoForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
         waystoneUpdateTimer++;
 
         if (waystoneUpdateTimer % 10 == 0) {
-            String playerDimension = player.level().dimension().location().toString();
+            String playerDimension = player.level().dimension().identifier().toString();
             BlockPos playerPos = player.blockPosition();
             double minSqDist = Double.MAX_VALUE;
 
             // Iterate waystones, finding closest one
             for (Waystone waystone : knownWaystones) {
-                String waystoneDimension = waystone.getDimension().location().toString();
+                String waystoneDimension = waystone.getDimension().identifier().toString();
 
                 // Only consider waystones with names
                 if (!waystone.hasName()) continue;
@@ -82,7 +82,7 @@ public class NeoForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
 
             // Iterate sharestones, finding closest one
             for (Waystone sharestone : sharestones) {
-                String sharestoneDimension = sharestone.getDimension().location().toString();
+                String sharestoneDimension = sharestone.getDimension().identifier().toString();
 
                 // Only consider sharestones with names
                 if (!sharestone.hasName()) continue;
@@ -144,7 +144,7 @@ public class NeoForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
     }
 
     @Override
-    public void renderText(float partialTicks, GuiGraphics guiGraphics) {
+    public void renderText(float partialTicks, GuiGraphicsExtractor guiGraphics) {
         waystoneTitleRenderer.renderText(partialTicks, guiGraphics);
     }
 

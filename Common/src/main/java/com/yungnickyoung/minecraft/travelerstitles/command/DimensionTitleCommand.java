@@ -3,28 +3,29 @@ package com.yungnickyoung.minecraft.travelerstitles.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
-import net.minecraft.Util;
+import net.minecraft.server.permissions.Permissions;
+import net.minecraft.util.Util;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 
 public class DimensionTitleCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection environment) {
         dispatcher.register(Commands
             .literal("dimensiontitle")
-                .requires((source) -> source.hasPermission(2))
+            .requires((source) -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
             .then(Commands.argument("dimension", DimensionArgument.dimension())
                 .executes((ctx) -> displayTitle(ctx.getSource(), DimensionArgument.getDimension(ctx, "dimension")))));
     }
 
     public static int displayTitle(CommandSourceStack commandSource, ServerLevel world) {
         // Get dimension key
-        ResourceLocation dimensionBaseKey = world.dimension().location();
+        Identifier dimensionBaseKey = world.dimension().identifier();
         String dimensionNameKey = Util.makeDescriptionId(TravelersTitlesCommon.MOD_ID, dimensionBaseKey);
 
         if (TravelersTitlesCommon.CONFIG.dimensions.dimensionBlacklist.contains(dimensionBaseKey.toString())) {

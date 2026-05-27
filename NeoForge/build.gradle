@@ -1,6 +1,6 @@
 plugins {
     id 'multiloader-loader'
-    id 'net.neoforged.gradle.userdev' version '7.0.184'
+    id 'net.neoforged.gradle.userdev' version '7.1.21'
     id 'net.darkhax.curseforgegradle'
     id 'com.modrinth.minotaur'
 }
@@ -57,10 +57,6 @@ configurations {
 dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
     implementation "com.yungnickyoung.minecraft.yungsapi:YungsApi:${mc_version}-NeoForge-${yungsapi_version}"
-
-    // Waystones
-    implementation "curse.maven:waystones-245755:${waystones_fileid_neoforge}"
-    implementation "curse.maven:balm-531761:${balm_fileid_neoforge}"
 }
 
 String[] compatibleVersions = project.compatible_versions.split(',')

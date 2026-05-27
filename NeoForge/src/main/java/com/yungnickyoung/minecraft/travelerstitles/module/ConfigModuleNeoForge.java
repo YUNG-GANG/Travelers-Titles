@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ConfigModuleNeoForge {
     public static void init(ModContainer container) {
-        container.registerConfig(ModConfig.Type.CLIENT, TTConfigNeoForge.SPEC, "travelerstitles-neoforge-1_21.toml");
+        container.registerConfig(ModConfig.Type.CLIENT, TTConfigNeoForge.SPEC, "travelerstitles-neoforge-26_1.toml");
         NeoForge.EVENT_BUS.addListener(ConfigModuleNeoForge::onWorldLoad);
         TravelersTitlesNeoForge.loadingContextEventBus.addListener(ConfigModuleNeoForge::configChanged);
     }

@@ -8,12 +8,13 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.permissions.Permissions;
 
 public class ReloadConfigCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection environment) {
         dispatcher.register(Commands
             .literal("tt_reload")
-            .requires((source) -> source.hasPermission(2))
+            .requires((source) -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
             .executes(ctx -> reloadConfig(ctx.getSource())));
     }
 

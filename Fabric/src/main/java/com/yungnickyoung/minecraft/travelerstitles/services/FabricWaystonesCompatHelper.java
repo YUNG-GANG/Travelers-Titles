@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.travelerstitles.services;
 
 import com.yungnickyoung.minecraft.travelerstitles.module.ConfigModule;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.entity.player.Player;
 
 public class FabricWaystonesCompatHelper implements IWaystonesCompatHelper {
@@ -19,7 +19,7 @@ public class FabricWaystonesCompatHelper implements IWaystonesCompatHelper {
     }
 
     @Override
-    public void renderText(float partialTicks, GuiGraphics guiGraphics) {
+    public void renderText(float partialTicks, GuiGraphicsExtractor guiGraphics) {
     }
 
     @Override
