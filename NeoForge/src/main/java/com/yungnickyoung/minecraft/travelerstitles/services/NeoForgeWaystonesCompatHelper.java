@@ -4,7 +4,9 @@ import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
 import com.yungnickyoung.minecraft.travelerstitles.module.ConfigModule;
 import com.yungnickyoung.minecraft.travelerstitles.module.SoundModule;
 import com.yungnickyoung.minecraft.travelerstitles.render.TitleRenderer;
+import net.blay09.mods.balm.Balm;
 import net.blay09.mods.waystones.api.Waystone;
+import net.blay09.mods.waystones.api.WaystoneKinds;
 import net.blay09.mods.waystones.api.WaystoneTypes;
 import net.blay09.mods.waystones.api.event.WaystonesListReceivedEvent;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -39,7 +41,7 @@ public class NeoForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
 
     @Override
     public void init() {
-        NeoForge.EVENT_BUS.addListener(this::onWaystoneListReceived);
+        WaystonesListReceivedEvent.EVENT.register(this::onWaystoneListReceived);
         NeoForge.EVENT_BUS.addListener(this::updateClosestWaystone);
     }
 
@@ -47,10 +49,10 @@ public class NeoForgeWaystonesCompatHelper implements IWaystonesCompatHelper {
      * Updates the stored player's list of known waystones.
      */
     private void onWaystoneListReceived(final WaystonesListReceivedEvent event) {
-        if (event.getWaystoneType().equals(WaystoneTypes.WAYSTONE)) {
-            knownWaystones = event.getWaystones();
-        } else if (WaystoneTypes.isSharestone(event.getWaystoneType())) {
-            sharestones.addAll(event.getWaystones());
+        if (event.waystoneType().equals(WaystoneKinds.WAYSTONE)) {
+            knownWaystones = event.waystones();
+        } else if (WaystoneKinds.isSharestone(event.waystoneType())) {
+            sharestones.addAll(event.waystones());
         }
     }
 
