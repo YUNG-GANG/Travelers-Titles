@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerTickMixin extends Player {
-    public LocalPlayerTickMixin(Level $$0, BlockPos $$1, float $$2, GameProfile $$3) {
-        super($$0, $$1, $$2, $$3);
+    public LocalPlayerTickMixin(final Level level, final GameProfile gameProfile) {
+        super(level, gameProfile);
     }
 
     @Inject(method = "tick", at = @At(value = "TAIL"))

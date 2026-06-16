@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.yungnickyoung.minecraft.travelerstitles.TravelersTitlesCommon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
@@ -61,7 +61,7 @@ public class TitleRenderer<T> {
         this.isTextCentered = centerText;
     }
 
-    public void renderText(float partialTicks, GuiGraphics guiGraphics) {
+    public void renderText(float partialTicks, GuiGraphicsExtractor guiGraphics) {
         if (displayedTitle != null && titleTimer > 0) {
             float age = (float) titleTimer - partialTicks;
             int opacity = 255;
@@ -77,16 +77,15 @@ public class TitleRenderer<T> {
             opacity = Mth.clamp(opacity, 0, 255);
             if (opacity > 8) {
                 // Set up render system
-                guiGraphics.pose().pushPose();
+                guiGraphics.pose().pushMatrix();
                 if (this.isTextCentered) {
-                    guiGraphics.pose().translate(Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2D, (Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2D), 0);
+                    guiGraphics.pose().translate(Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2f,
+                                                 (Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2f));
                 }
-                RenderSystem.enableBlend();
-                RenderSystem.defaultBlendFunc();
 
                 // Render title
-                guiGraphics.pose().pushPose();
-                guiGraphics.pose().scale(titleTextSize, titleTextSize, titleTextSize);
+                guiGraphics.pose().pushMatrix();
+                guiGraphics.pose().scale(titleTextSize, titleTextSize);
                 int alpha = opacity << 24 & 0xFF000000;
                 Font fontRenderer = Minecraft.getInstance().font;
                 int titleWidth = fontRenderer.width(displayedTitle);
@@ -100,21 +99,20 @@ public class TitleRenderer<T> {
                     : this.titleXOffset;
 
                 // Render title
-                guiGraphics.drawString(fontRenderer, displayedTitle, xOffset, titleYOffset, titleTextcolor | alpha, showTextShadow);
-                guiGraphics.pose().popPose();
+                guiGraphics.text(fontRenderer, displayedTitle, xOffset, titleYOffset, titleTextcolor | alpha, showTextShadow);
+                guiGraphics.pose().popMatrix();
 
                 // Subtitle render. Currently unused
                 if (displayedSubTitle != null) {
-                    guiGraphics.pose().pushPose();
-                    guiGraphics.pose().scale(1.3F, 1.3F, 1.3F);
+                    guiGraphics.pose().pushMatrix();
+                    guiGraphics.pose().scale(1.3F, 1.3F);
                     int subtitleWidth = fontRenderer.width(displayedSubTitle);
                     drawBackdrop(guiGraphics, 5, subtitleWidth, 0xFFFFFF | alpha);
-                    guiGraphics.drawString(fontRenderer, displayedSubTitle, -subtitleWidth / 2, -35, 0xFFFFFF | alpha, showTextShadow);
-                    guiGraphics.pose().popPose();
+                    guiGraphics.text(fontRenderer, displayedSubTitle, -subtitleWidth / 2, -35, 0xFFFFFF | alpha, showTextShadow);
+                    guiGraphics.pose().popMatrix();
                 }
 
-                RenderSystem.disableBlend();
-                guiGraphics.pose().popPose();
+                guiGraphics.pose().popMatrix();
             }
         }
     }
@@ -165,7 +163,7 @@ public class TitleRenderer<T> {
         return this.recentEntries.stream().anyMatch(entryMatchPredicate);
     }
 
-    protected void drawBackdrop(GuiGraphics guiGraphics, int yOffset, int width, int color) {
+    protected void drawBackdrop(GuiGraphicsExtractor guiGraphics, int yOffset, int width, int color) {
         int textBackgroundColor = Minecraft.getInstance().options.getBackgroundColor(0.0F);
         if (textBackgroundColor != 0) {
             int xOffset = -width / 2;
